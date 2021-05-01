@@ -9,7 +9,7 @@ const cors = require('cors');
 const multer = require('multer');
 
 require('dotenv').config();
-// require('./helpers/init_mongodb');
+require('./helpers/init_mongodb');
 
 const { verifyAccessToken } = require('./helpers/jwt_helper');
 const AuthRoute = require('./routes/auth.route');
@@ -39,26 +39,32 @@ app.use((req, res, next) => {
   next();
 });
 
-// const mongoDBStore = new MongoDBStore({
-//   uri: `${process.env.MONGODB_URI}/${process.env.DB_NAME}`,
-//   collection: 'session',
-//   ttl: parseInt(process.env.SESSION_LIFETIME) / 1000
-// });
+// Local Development
+// let uri = `${process.env.MONGODB_URI}/${process.env.DB_NAME}`
 
-// app.use(session({
-//   name: process.env.SESSION_NAME,
-//   secret: process.env.SESSION_SECRET,
-//   resave: false,
-//   saveUninitialized: false,
-//   store: mongoDBStore,
+// Product
+const uri = `mongodb+srv://pandopot:MF2MolHMUfmcnflJ@cluster0.yjoup.gcp.mongodb.net/pandopot`;
 
-//   cookie: {
-//     maxAge: parseInt(process.env.SESSION_LIFETIME),
-//     sameSite: false, // this may need to be false is you are accessing from another React app
-//     httpOnly: false, // this must be false if you want to access the cookie
-//     secure: process.env.NODE_ENV === "production"
-//   }
-// }));
+const mongoDBStore = new MongoDBStore({
+  uri: uri,
+  collection: 'session',
+  ttl: parseInt(process.env.SESSION_LIFETIME) / 1000
+});
+
+app.use(session({
+  name: process.env.SESSION_NAME,
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: mongoDBStore,
+
+  cookie: {
+    maxAge: parseInt(process.env.SESSION_LIFETIME),
+    sameSite: false, // this may need to be false is you are accessing from another React app
+    httpOnly: false, // this must be false if you want to access the cookie
+    secure: process.env.NODE_ENV === "production"
+  }
+}));
 
 app.get('/', async (req, res, next) => {
   console.log(req.payload);
