@@ -1,7 +1,11 @@
 {
-  "name": "project",
+  "name": "pandopot",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Pandopot web application",
+  "engines": {
+    "node": "14.x"
+  },
+  "main": "app.js",
   "license": "MIT",
   "scripts": {
     "start": "node app.js",
