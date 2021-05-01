@@ -74,8 +74,8 @@ app.get('/', async (req, res, next) => {
 app.get('/stutus', async (req, res, next) => {
 let data = {
   dbusername: process.env.DB_USERNAME_PRO,
-  dbnamepro: DB_NAME_PROD,
-  dbpasspro: DB_PASS_PROD,
+  dbnamepro: process.env.DB_NAME_PROD,
+  dbpasspro: process.DB_PASS_PROD,
 
   accesstokensecret: process.env.ACCESS_TOKEN_SECRET,
   refreshtoken: process.env.REFRESH_TOKEN_SECRET,
