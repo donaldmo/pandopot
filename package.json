@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Pandopot web application",
   "engines": {
-    "node": "14.x"
+    "node": "15.x"
   },
   "main": "app.js",
   "license": "MIT",
