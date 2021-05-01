@@ -30,22 +30,22 @@ mongoose.connect(uri, connectionParams)
     console.error(`Error connecting to the database. \n${err}`);
   })
 
-mongoose.connection.on('connected', () => {
-  console.log('Mongoose connected to db');
-});
+// mongoose.connection.on('connected', () => {
+//   console.log('Mongoose connected to db');
+// });
 
-mongoose.connection.on('error', (err) => {
-  console.log(err.message);
-});
+// mongoose.connection.on('error', (err) => {
+//   console.log(err.message);
+// });
 
-mongoose.connection.on('disconneted', () => {
-  console.log('Mongoose connection is disconnected.')
-});
+// mongoose.connection.on('disconneted', () => {
+//   console.log('Mongoose connection is disconnected.')
+// });
 
-process.on('SIGINT', async () => {
-  await mongoose.connection.close();
-  process.exit(0)
-});
+// process.on('SIGINT', async () => {
+//   await mongoose.connection.close();
+//   process.exit(0)
+// });
 
 // Connect to Cluster0
 // const MongoClient = require('mongodb').MongoClient;
