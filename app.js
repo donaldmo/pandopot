@@ -71,6 +71,30 @@ app.get('/', async (req, res, next) => {
   res.send('Hello from pandopot');
 });
 
+app.get('/stutus', async (req, res, next) => {
+let data = {
+  dbusername: process.env.DB_USERNAME_PRO,
+  dbnamepro: DB_NAME_PROD,
+  dbpasspro: DB_PASS_PROD,
+
+  accesstokensecret: process.env.ACCESS_TOKEN_SECRET,
+  refreshtoken: process.env.REFRESH_TOKEN_SECRET,
+  accesstoken: process.env.ACCESS_TOKEN_EXP,
+  refhreshtokenexp: process.env.REFRESH_TOKEN_EXP,
+
+  confirmtokensecrete: process.env.CONFIRM_TOKEN_SECRET,
+  confirmtokenexp: process.env.CONFIRM_TOKEN_EXP,
+
+  resettokensecret: process.env.RESET_TOKEN_SECRET,
+  resettokenext: process.env.RESET_TOKEN_EXP,
+
+  sessionname: process.env.SESSION_NAME,
+  sessionsecrete: process.env.SESSION_SECRET,
+  sesseionlifetime: process.env.SESSION_LIFETIME,
+}
+  res.send(data);
+});
+
 app.use('/auth', AuthRoute);
 app.use('/admin', AdminRoute);
 app.use('/product', ProductRoute);
