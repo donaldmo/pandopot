@@ -1,19 +1,34 @@
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGODB_URI, { 
-  dbName: process.env.DB_NAME,
+// mongoose.connect(process.env.MONGODB_URI, {  
+//   dbName: process.env.DB_NAME,
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+//   useFindAndModify: false,
+//   useCreateIndex: true
+// })
+// .then((result) => {
+//   // console.log(result)
+//   console.log('mongodb connected.');
+// })
+// .catch(err => {
+//   console.log(err.message);
+// });
+
+const uri = `mongodb+srv://${process.env.DB_USERNAME_PROD}:${process.env.DB_PASS_PROD}@cluster0.yjoup.gcp.mongodb.net/${process.env.DB_NAME_PROD}?retryWrites=true&w=majority`
+
+const connectionParams = {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true
-})
-.then((result) => {
-  // console.log(result)
-  console.log('mongodb connected.');
-})
-.catch(err => {
-  console.log(err.message);
-});
+  useCreateIndex: true,
+  useUnifiedTopology: true
+}
+mongoose.connect(uri, connectionParams)
+  .then(() => {
+    console.log('Connected to database on production...ls')
+  })
+  .catch((err) => {
+    console.error(`Error connecting to the database. \n${err}`);
+  })
 
 mongoose.connection.on('connected', () => {
   console.log('Mongoose connected to db');
