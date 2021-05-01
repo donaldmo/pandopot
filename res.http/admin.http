@@ -1,0 +1,135 @@
+GET http://localhost:4000/admin
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTM5Mzk1MzgsImV4cCI6MTYxNDAyNTkzOCwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.GDLuSSsFaUueGJNsQxr8dIchuhcnrFX_60KiqWFry0U
+
+### Admin add package
+POST http://localhost:4000/admin/add-package
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTM5Mzk1MzgsImV4cCI6MTYxNDAyNTkzOCwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.GDLuSSsFaUueGJNsQxr8dIchuhcnrFX_60KiqWFry0U
+
+{
+  "name": "Basic",
+  "price": "200",
+  "description": "List for 3 months.",
+  "features": [ 
+    { "name": "list for 3 months"}, 
+    { "name": "post up to 15 images" }, 
+    { "name": "auto email alert to relevent buyers" }, 
+    { "name": "instant lead notification" }, 
+    { "name": "track listing performance" }
+  ]
+}
+
+### Admin get package
+POST http://localhost:4000/admin/get-package
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTM5Mzk1MzgsImV4cCI6MTYxNDAyNTkzOCwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.GDLuSSsFaUueGJNsQxr8dIchuhcnrFX_60KiqWFry0U
+
+{
+  "id": "60316899e610fe0370525148"
+}
+
+### Admin get packages
+POST http://localhost:4000/admin/get-packages
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTM5Mzk1MzgsImV4cCI6MTYxNDAyNTkzOCwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.GDLuSSsFaUueGJNsQxr8dIchuhcnrFX_60KiqWFry0U
+
+### Admin admin package
+GET http://localhost:4000/admin/get-admin-package
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTM5Mzk1MzgsImV4cCI6MTYxNDAyNTkzOCwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.GDLuSSsFaUueGJNsQxr8dIchuhcnrFX_60KiqWFry0U
+
+
+### Admin delete package
+DELETE http://localhost:4000/admin/delete-package
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTM5Mzk1MzgsImV4cCI6MTYxNDAyNTkzOCwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.GDLuSSsFaUueGJNsQxr8dIchuhcnrFX_60KiqWFry0U
+
+{
+  "id": "60300626a22dee04940c1aeb"
+}
+
+### Admin Edit package
+PUT http://localhost:4000/admin/edit-package
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTM5Mzk1MzgsImV4cCI6MTYxNDAyNTkzOCwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.GDLuSSsFaUueGJNsQxr8dIchuhcnrFX_60KiqWFry0U
+
+{
+  "id": "60316899e610fe0370525148",
+  "description": "This is the description of the package"
+}
+
+### Get package
+POST http://localhost:4000/admin/package
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTQwNzUxMTAsImV4cCI6MTYxNDE2MTUxMCwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.WAxtkbWf7oBd5BX5RYrCMVIzKHU8tldie9rr0__DDDo
+
+{ "id": "60315820e610fe0370525147" }
+
+### Get packages
+GET http://localhost:4000/admin/packages
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTQwNzUxMTAsImV4cCI6MTYxNDE2MTUxMCwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.WAxtkbWf7oBd5BX5RYrCMVIzKHU8tldie9rr0__DDDo
+
+### DELETE package
+DELETE http://localhost:4000/admin/delete-package/60316da654eea804198a7af0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTQwNzUxMTAsImV4cCI6MTYxNDE2MTUxMCwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.WAxtkbWf7oBd5BX5RYrCMVIzKHU8tldie9rr0__DDDo
+
+### Get package
+POST http://localhost:4000/admin/add-categories
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTQwNzUxMTAsImV4cCI6MTYxNDE2MTUxMCwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.WAxtkbWf7oBd5BX5RYrCMVIzKHU8tldie9rr0__DDDo
+
+{
+  "categories": [
+    { 
+      "name": "Landscaping2",
+      "description": "Landscaping description"
+    },
+    { 
+      "name": "Garden & Farming2",
+      "description": "Garden and farming description"
+    }
+  ]
+}
+
+### Get Admin categories
+GET http://localhost:4000/admin/get-categories
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTQwNzUxMTAsImV4cCI6MTYxNDE2MTUxMCwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.WAxtkbWf7oBd5BX5RYrCMVIzKHU8tldie9rr0__DDDo
+
+### Get categories
+GET http://localhost:4000/admin/categories
+Content-Type: application/json
+
+### Get Admin categories
+POST http://localhost:4000/admin/get-category
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTQwNzUxMTAsImV4cCI6MTYxNDE2MTUxMCwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.WAxtkbWf7oBd5BX5RYrCMVIzKHU8tldie9rr0__DDDo
+
+{
+  "id": "603417dbf3b65c088862e79a"
+}
+
+### Get category
+GET http://localhost:4000/admin/category
+Content-Type: application/json
+
+{
+  "id": "603417dbf3b65c088862e79a"
+}
+
+### Admin Edit category
+PUT http://localhost:4000/admin/edit-category
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTQwNzUxMTAsImV4cCI6MTYxNDE2MTUxMCwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.WAxtkbWf7oBd5BX5RYrCMVIzKHU8tldie9rr0__DDDo
+
+{
+  "id": "603417dbf3b65c088862e79a",
+  "description": "This is the edited description of the category2"
+}
+
+### Admin Delete category
+DELETE  http://localhost:4000/admin/delete-category/603417dbf3b65c088862e79a
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTQwNzUxMTAsImV4cCI6MTYxNDE2MTUxMCwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.WAxtkbWf7oBd5BX5RYrCMVIzKHU8tldie9rr0__DDDo

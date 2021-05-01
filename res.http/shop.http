@@ -1,0 +1,47 @@
+### GET shop products
+GET http://localhost:4000/shop/get-products
+
+###GET shop get product by id
+GET http://localhost:4000/shop/get-product/6039445bbe12f404e494630f
+
+
+###GET shop product add to cart
+POST http://localhost:4000/shop/add-cart
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTQ3MDc0NDYsImV4cCI6MTYxNDc5Mzg0NiwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.4-57cogW0JIdkJNoRhWSMZ_DDDq8hBqTKv8za835w-A
+
+{
+  "id": "6039445bbe12f404e494630f",
+  "quantity": 1
+}
+
+###GET shop cart
+GET http://localhost:4000/shop/get-cart
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTQ3MDc0NDYsImV4cCI6MTYxNDc5Mzg0NiwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.4-57cogW0JIdkJNoRhWSMZ_DDDq8hBqTKv8za835w-A
+
+###POST shop UPDATE cart
+POST http://localhost:4000/shop/update-cart
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTQ3MDc0NDYsImV4cCI6MTYxNDc5Mzg0NiwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.4-57cogW0JIdkJNoRhWSMZ_DDDq8hBqTKv8za835w-A
+
+{
+  "cart": [
+    { "id": "603e85d5fd9c590806dd94a1", "quantity": "2" },
+    { "id": "6039445bbe12f404e494630f", "quantity": "2" }
+  ]
+}
+
+###GET shop categories
+GET http://localhost:4000/shop/categories
+
+###GET shop get category product by category id
+GET http://localhost:4000/shop/get-category-products/603527d6f1a99305a56b2c3c
+
+
+###GET Featured Products
+GET http://localhost:4000/shop/boosted-products/featured
+
+###GET Slider Products
+GET http://localhost:4000/shop/boosted-products/slider
+

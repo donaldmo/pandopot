@@ -1,0 +1,118 @@
+GET http://localhost:4000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTQwNzUxMTAsImV4cCI6MTYxNDE2MTUxMCwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.WAxtkbWf7oBd5BX5RYrCMVIzKHU8tldie9rr0__DDDo
+
+###Login Route
+POST http://localhost:4000/auth/login
+Content-Type: application/json
+
+{
+  "email": "test33@gmail.com",
+  "password": "password123"
+}
+
+###Register Route For Admins
+POST http://localhost:4000/auth/register
+Content-Type: application/json
+
+{
+  "email": "test33@gmail.com",
+  "password": "password123",
+  "firstName": "Donald",
+  "lastName": "Motswiri",
+  "role": "admin"
+}
+
+###Register Route
+POST http://localhost:4000/auth/register
+Content-Type: application/json
+
+{
+  "email": "test33@gmail.com",
+  "password": "password123"
+}
+
+###Refresh token Route
+POST http://localhost:4000/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTMzMDI2MzgsImV4cCI6MTY0NDg2MDIzOCwiYXVkIjoiNjAyN2NkMDc0YWQ4OTczZTM4OGU0MGYxIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.bxGmWWs-b5evJ5P_s3U8IitbVKrL_3snf8bPVO60IGM"
+}
+
+###Logout Route
+DELETE http://localhost:4000/auth/logout
+
+###Test email Route
+POST http://localhost:4000/auth/sendemail
+Content-Type: application/json
+
+{
+  "email": "domotswiri@gmail.com",
+  "username": "@domotswiri"
+}
+
+###Verify email Route
+POST http://localhost:4000/auth/verify-email
+Content-Type: application/json
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTM0OTA3NjAsImV4cCI6MTYxMzU3NzE2MCwiYXVkIjoidGVzdDMwQGdtYWlsLmNvbSIsImlzcyI6InBpY2t1cnBhZ2UuY29tIn0.MJudFm-kduObitPeuN_qK166IJjkVO4N7Kutj83xftE"
+}
+
+###User Account Details Route
+GET http://localhost:4000/auth/my-account
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTQ1ODU4NTEsImV4cCI6MTYxNDY3MjI1MSwiYXVkIjoidGVzdDMzQGdtYWlsLmNvbSIsImlzcyI6InBpY2t1cnBhZ2UuY29tIn0.E-TiEBcJ87UdLNdRlPLcy3PfR7qfnfsthg2ImEzaY5o"
+
+
+### Forgot password Route
+POST http://localhost:4000/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "test33@gmail.com"
+}
+
+### Reset password Route
+POST http://localhost:4000/auth/reset-password
+Content-Type: application/json
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTgyNTAxMDgsImV4cCI6MTYxODMzNjUwOCwiYXVkIjoidGVzdDMzQGdtYWlsLmNvbSIsImlzcyI6InBpY2t1cnBhZ2UuY29tIn0.esQNAIW8jHnm1yuq5OOXyqm8OwoiZXbjVZZq_GItZv8",
+  "password": "password123"
+}
+
+### Get Subscription Route
+GET http://localhost:4000/subscription/get-subscription
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTYwNjc1NzAsImV4cCI6MTYxODY1OTU3MCwiYXVkIjoiNjAyYmVlMDI3YWQxY2IyODBjNTMwZjJmIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.MFvsd1blANVRvZXDeirQ2oN-Ak_jj2LV7LYNazkGXn0
+
+### POST Subscription Route
+POST http://localhost:4000/subscription/add-subscription
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTYwNjc1NzAsImV4cCI6MTYxODY1OTU3MCwiYXVkIjoiNjAyYmVlMDI3YWQxY2IyODBjNTMwZjJmIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.MFvsd1blANVRvZXDeirQ2oN-Ak_jj2LV7LYNazkGXn0
+
+{
+  "email": "test33@gmail.com"
+}
+
+### GET Subscriptions Route
+GET http://localhost:4000/subscription/get-subscriptions
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTYwNjc1NzAsImV4cCI6MTYxODY1OTU3MCwiYXVkIjoiNjAyYmVlMDI3YWQxY2IyODBjNTMwZjJmIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.MFvsd1blANVRvZXDeirQ2oN-Ak_jj2LV7LYNazkGXn0
+
+### GET Subscription Route
+GET http://localhost:4000/subscription/get-subscription/606c3fe220f4340244fa80c4
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTYwNjc1NzAsImV4cCI6MTYxODY1OTU3MCwiYXVkIjoiNjAyYmVlMDI3YWQxY2IyODBjNTMwZjJmIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.MFvsd1blANVRvZXDeirQ2oN-Ak_jj2LV7LYNazkGXn0
+
+{
+  "id": "606c3fe220f4340244fa80c4"
+}
+
+### POST Contact user
+POST http://localhost:4000/auth/user/contact-user
+Content-Type: application/json
+
+{
+  "enquireName": "Donald Motswiri"
+}

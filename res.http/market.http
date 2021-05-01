@@ -1,0 +1,8 @@
+
+## GET Market by Category
+GET http://localhost:4000/market/get-markets-by-category/603527d6f1a99305a56b2c39
+Content-Type: application/json
+
+{
+  "id": "60300626a22dee04940c1aeb"
+}
