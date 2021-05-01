@@ -39,26 +39,26 @@ app.use((req, res, next) => {
   next();
 });
 
-const mongoDBStore = new MongoDBStore({
-  uri: `${process.env.MONGODB_URI}/${process.env.DB_NAME}`,
-  collection: 'session',
-  ttl: parseInt(process.env.SESSION_LIFETIME) / 1000
-});
+// const mongoDBStore = new MongoDBStore({
+//   uri: `${process.env.MONGODB_URI}/${process.env.DB_NAME}`,
+//   collection: 'session',
+//   ttl: parseInt(process.env.SESSION_LIFETIME) / 1000
+// });
 
-app.use(session({
-  name: process.env.SESSION_NAME,
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  store: mongoDBStore,
+// app.use(session({
+//   name: process.env.SESSION_NAME,
+//   secret: process.env.SESSION_SECRET,
+//   resave: false,
+//   saveUninitialized: false,
+//   store: mongoDBStore,
 
-  cookie: {
-    maxAge: parseInt(process.env.SESSION_LIFETIME),
-    sameSite: false, // this may need to be false is you are accessing from another React app
-    httpOnly: false, // this must be false if you want to access the cookie
-    secure: process.env.NODE_ENV === "production"
-  }
-}));
+//   cookie: {
+//     maxAge: parseInt(process.env.SESSION_LIFETIME),
+//     sameSite: false, // this may need to be false is you are accessing from another React app
+//     httpOnly: false, // this must be false if you want to access the cookie
+//     secure: process.env.NODE_ENV === "production"
+//   }
+// }));
 
 app.get('/', async (req, res, next) => {
   console.log(req.payload);
