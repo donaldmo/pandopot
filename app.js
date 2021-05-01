@@ -9,7 +9,7 @@ const cors = require('cors');
 const multer = require('multer');
 
 require('dotenv').config();
-require('./helpers/init_mongodb');
+// require('./helpers/init_mongodb');
 
 const { verifyAccessToken } = require('./helpers/jwt_helper');
 const AuthRoute = require('./routes/auth.route');
@@ -60,9 +60,9 @@ app.use(session({
   }
 }));
 
-app.get('/', verifyAccessToken, async (req, res, next) => {
+app.get('/', async (req, res, next) => {
   console.log(req.payload);
-  res.send('Hello from express');
+  res.send('Hello from pandopot');
 });
 
 app.use('/auth', AuthRoute);
