@@ -77,20 +77,20 @@ let data = {
   dbnamepro: process.env.DB_NAME_PROD,
   dbpasspro: process.DB_PASS_PROD,
 
-  accesstokensecret: process.env.ACCESS_TOKEN_SECRET,
-  refreshtoken: process.env.REFRESH_TOKEN_SECRET,
-  accesstoken: process.env.ACCESS_TOKEN_EXP,
-  refhreshtokenexp: process.env.REFRESH_TOKEN_EXP,
+  accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
+  refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
+  accessTokenExp: process.env.ACCESS_TOKEN_EXP,
+  refreshTokenExp: process.env.REFRESH_TOKEN_EXP,
 
-  confirmtokensecrete: process.env.CONFIRM_TOKEN_SECRET,
-  confirmtokenexp: process.env.CONFIRM_TOKEN_EXP,
+  confirmTokenSecret: process.env.CONFIRM_TOKEN_SECRET,
+  confirmTokenExp: process.env.CONFIRM_TOKEN_EXP,
 
-  resettokensecret: process.env.RESET_TOKEN_SECRET,
-  resettokenext: process.env.RESET_TOKEN_EXP,
+  resetTokenSecret: process.env.RESET_TOKEN_SECRET,
+  resetTokenExp: process.env.RESET_TOKEN_EXP,
 
-  sessionname: process.env.SESSION_NAME,
-  sessionsecrete: process.env.SESSION_SECRET,
-  sesseionlifetime: process.env.SESSION_LIFETIME,
+  sessionName: process.env.SESSION_NAME,
+  sessionSecret: process.env.SESSION_SECRET,
+  sessionLifetime: process.env.SESSION_LIFETIME,
 
   emailUsername: process.env.EMAIL_USERNAME, 
   emaiPassword: process.env.EMAIL_PASSWORD,
