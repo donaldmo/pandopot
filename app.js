@@ -93,11 +93,11 @@ let data = {
   sesseionlifetime: process.env.SESSION_LIFETIME,
 
   emailUsername: process.env.EMAIL_USERNAME, 
-  emailUsername: process.env.EMAIL_PASSWORD,
-  emailUsername: process.env.EMAIL_HOST,
-  emailUsername: process.env.APP_NAME,
+  emaiPassword: process.env.EMAIL_PASSWORD,
+  emailHost: process.env.EMAIL_HOST,
+  appName: process.env.APP_NAME,
 
-  apiendpoint: process.envAPI_ENDPOINT
+  apiEndPoint: process.envAPI_ENDPOINT
 }
   res.send(data);
 });
