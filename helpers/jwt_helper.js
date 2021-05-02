@@ -63,7 +63,7 @@ module.exports = {
 
       JWT.sign(payload, secret, options, (err, token) => {
         if (err) {
-          console.log('jwt_helper.js: ' ,error)
+          console.log('jwt_helper.js: ' ,err)
           reject(createError.InternalServerError());
         }
 
