@@ -49,6 +49,12 @@ module.exports = {
       const payload = {};
       const secret = process.env.REFRESH_TOKEN_SECRET;
 
+      console.log(
+        'userId: ', userId,
+        'secret: ', secret,
+        'expiresIn: ', process.env.REFRESH_TOKEN_EXP
+      );
+
       const options = {
         expiresIn: process.env.REFRESH_TOKEN_EXP,
         issuer: 'pickurpage.com',
@@ -57,6 +63,7 @@ module.exports = {
 
       JWT.sign(payload, secret, options, (err, token) => {
         if (err) {
+          console.log('jwt_helper.js: ' ,error)
           reject(createError.InternalServerError());
         }
 
