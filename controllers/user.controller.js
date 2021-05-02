@@ -41,6 +41,7 @@ exports.register = async (req, res, next) => {
     res.send({ accessToken, rereshToken });
   }
   catch (error) {
+    console.log(error)
     if (error.isJoi === true) error.status = 422;
     next(error);
   }

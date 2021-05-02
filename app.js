@@ -97,7 +97,8 @@ let data = {
   emailHost: process.env.EMAIL_HOST,
   appName: process.env.APP_NAME,
 
-  apiEndPoint: process.envAPI_ENDPOINT
+  apiEndPoint: process.env.API_ENDPOINT
+
 }
   res.send(data);
 });
