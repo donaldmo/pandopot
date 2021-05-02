@@ -13,7 +13,7 @@ router.delete('/logout', async (req, res, next) => {
   res.send('logout route');
 });
 
-router.post('/verify-email', verifyConfirmToken, userController.confirmEmail);
+router.get('/verify-email', verifyConfirmToken, userController.confirmEmail);
 router.post('/forgot-password', userController.forgotPassword);
 router.post('/reset-password', verifyResetToken, userController.resetPassword);
 

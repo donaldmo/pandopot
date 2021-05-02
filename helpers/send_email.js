@@ -1,40 +1,43 @@
 const nodemailer = require('nodemailer');
 const MailGen = require('mailgen');
+require('dotenv').config();
 
 // Configure mailgen by setting a theme and your product info
 const mailGenerator = new MailGen({
   theme: 'default',
   product: {
     name: 'Pandopot',
-    link: 'https://pandopot.co.za/',
-    logo: 'http://localhost:5000/images/favicon.png'
+    link: 'https://pandopot.com/',
+    logo: 'https://pandopot.com/pandopot-logo-grey.png' 
   }
 });
 
 var transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: process.env.EMAIL_HOST, 
+  port: 465,
+  secure: true,
   auth: {
-    user: 'motswiridonald@gmail.com',
-    pass: 'donald120'
-  }
+    user: process.env.EMAIL_USERNAME, 
+    pass: process.env.EMAIL_PASSWORD,
+  },
 });
 
 module.exports = {
   registerEmail: (data) => {
+console.log('api_endpoint', process.env.API_ENDPOINT)
     const { username, confirmToken } = data;
     const subject = 'Welcome to Pandopot We\'re very excited to have you on board.'
 
-    // Prepare email contents
     var emailTemplate = {
       body: {
         name: username,
-        intro: 'Welcome to Pandopot.co.za We\'re very excited to have you on board.',
+        intro: 'Welcome to pandopot.com We\'re very excited to have you on board.',
         action: {
           instructions: 'To get started , please click  a button below to confirm your email:',
           button: {
             color: '#22BC66',
             text: 'Confirm your account',
-            link: `http://localhost:4000/verify-email?token=${confirmToken}`
+            link: `${process.env.API_ENDPOINT}/auth/verify-email/?token=${confirmToken}`
           }
         },
         outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.'
@@ -54,10 +57,10 @@ module.exports = {
     // console.log(emailBody);
 
     const mailOptions = {
-      from: 'motswiridonald@gmail.com', // sender address
-      to: 'domotswiri@gmail.com', // list of receivers
-      subject: subject, // Subject line
-      html: emailBody// plain text body
+      from: 'app@pandopot.com', 
+      to: data.email, 
+      subject: subject,
+      html: emailBody
     };
 
     transporter.sendMail(mailOptions, function (err, info) {

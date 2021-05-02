@@ -99,11 +99,11 @@ module.exports = {
 
   verifyConfirmToken: async (req, res, next) => {
     try {
-      if (!req.body.token) {
+      if (!req.query.token) {
         return next(createError.BadRequest('Confirm token is required.'));
       }
   
-      const token = req.query.token || req.body.token;
+      const token = req.query.token;
   
       JWT.verify(token, process.env.CONFIRM_TOKEN_SECRET, async (err, payload) => {
         if (err) {
