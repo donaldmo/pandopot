@@ -71,7 +71,7 @@ app.get('/', async (req, res, next) => {
   res.send('Hello from pandopot');
 });
 
-app.get('/stutus', async (req, res, next) => {
+app.get('/status', async (req, res, next) => {
 let data = {
   dbusername: process.env.DB_USERNAME_PRO,
   dbnamepro: process.env.DB_NAME_PROD,
@@ -91,6 +91,13 @@ let data = {
   sessionname: process.env.SESSION_NAME,
   sessionsecrete: process.env.SESSION_SECRET,
   sesseionlifetime: process.env.SESSION_LIFETIME,
+
+  emailUsername: process.env.EMAIL_USERNAME, 
+  emailUsername: process.env.EMAIL_PASSWORD,
+  emailUsername: process.env.EMAIL_HOST,
+  emailUsername: process.env.APP_NAME,
+
+  apiendpoint: process.envAPI_ENDPOINT
 }
   res.send(data);
 });

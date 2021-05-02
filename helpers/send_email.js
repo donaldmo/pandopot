@@ -24,7 +24,7 @@ var transporter = nodemailer.createTransport({
 
 module.exports = {
   registerEmail: (data) => {
-console.log('api_endpoint', process.env.API_ENDPOINT)
+
     const { username, confirmToken } = data;
     const subject = 'Welcome to Pandopot We\'re very excited to have you on board.'
 
