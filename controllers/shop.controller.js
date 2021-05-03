@@ -241,11 +241,12 @@ exports.getOrderItem = async (req, res, next) => {
       "_id": req.params.id,
       "user.userId": req.payload.aud
     })
+    console.log('orderItem: ', orderItem)
 
     res.send(orderItem);
   }
   catch (error) {
-
+    console.log(error)
     if (error.isJoi === true) error.status = 422;
     next(error);
   }

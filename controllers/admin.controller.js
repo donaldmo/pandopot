@@ -353,7 +353,7 @@ exports.getPaymentGateway = async (req, res, next) => {
   try {
     console.log('admin id: ', req.payload.aud);
 
-    const admin = await User.findOne({
+    const admin = await User.find({
       _id: req.payload.aud
     }).select("adminPaymentGateway");
     if (!admin) throw createError.NotFound('Admin could not be found.');
@@ -361,6 +361,24 @@ exports.getPaymentGateway = async (req, res, next) => {
     let { adminPaymentGateway } = admin;
 
     res.send(adminPaymentGateway)
+  }
+  catch (error) {
+    if (error.isJoi === true) error.status = 422;
+    next(error);
+  }
+}
+
+exports.getShopPaymentGateway = async (req, res, next) => {
+  try {
+    const admin = await User.findOne({
+      role: 'admin'
+    }).select("adminPaymentGateway")
+
+    if (!admin) throw createError.NotFound();
+    if (!admin.adminPaymentGateway) throw createError.NotFound();
+    console.log('admin.adminPaymentGateway: ', admin)
+
+    res.send(admin.adminPaymentGateway)
   }
   catch (error) {
     if (error.isJoi === true) error.status = 422;

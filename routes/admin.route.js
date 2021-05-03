@@ -27,6 +27,7 @@ router.delete('/delete-category/:id', verifyAccessToken, adminController.deleteC
 router.post('/add-categories', verifyAccessToken, adminController.addCategories);
 router.post('/add-admin-payment-gateway', verifyAccessToken, adminController.addAdminPaymentGateway);
 router.get('/get-payment-gateway', verifyAccessToken, adminController.getPaymentGateway);
+router.get('/payment-gateway', adminController.getShopPaymentGateway);
 
 router.get('/get-users', verifyAccessToken, adminController.getUsers);
 router.get('/get-user/:id', verifyAccessToken, adminController.getUser);

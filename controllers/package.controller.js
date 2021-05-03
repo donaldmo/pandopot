@@ -46,18 +46,20 @@ exports.buyPackage = async (req, res, next) => {
     });
 
     const admin = await User.findOne({
-      _id: package.author.userId,
       role: 'admin'
-    });
+    }).select("adminPaymentGateway")
 
     if (!package) throw createError.NotFound('Package not available');
     if (!admin) throw createError.NotFound();
+    if (!admin.adminPaymentGateway) throw createError.InternalServerError()
+    let { adminPaymentGateway } = admin;
+    console.log('admin.adminPaymentGateway: ', adminPaymentGateway)
 
-    if (req.body.payment && package && admin) {
+    if (req.body.payment && package && adminPaymentGateway) {
       let { id } = req.body.payment;
       let { amountInCents } = req.body;
       let currency = 'ZAR';
-      const SECRET_KEY = admin.paymentGateway.secret_key;
+      const SECRET_KEY = adminPaymentGateway.secret_key;
 
       var data = qs.stringify({
         'token': id,
@@ -76,15 +78,15 @@ exports.buyPackage = async (req, res, next) => {
       };
 
       axios(config).then(async (response) => {
-        // console.log(JSON.stringify(response.data));
+        console.log(JSON.stringify(response.data));
         let payment = response.data;
-        // console.log('payment: ', payment)
+        console.log('payment: ', payment)
 
         let expiryDate;
         if (package.expiryDate) {
           var future = new Date();
           future.setDate(future.getDate() + parseInt(package.expiryDate.days));
-    
+
           expiryDate = {
             date: future,
             days: parseInt(package.expiryDate.days)
@@ -93,33 +95,42 @@ exports.buyPackage = async (req, res, next) => {
 
         console.log('expiryDate: ', expiryDate)
 
-        const subscription = new Subscription({
-          item: package,
-          payment: payment,
-          subscriber: {
-            name: user.firstName + ' ' + user.lastName,
-            userId: user._id
-          },
-          expiryDate: expiryDate
-        });
+        if (payment) {
+          if (payment.status !==  'successful') {
+            throw createError.PaymentRequired('Payment Unsuccessful')
+          }
+          
+          const subscription = new Subscription({
+            item: package,
+            payment: payment,
+            subscriber: {
+              name: user.firstName + ' ' + user.lastName,
+              userId: user._id
+            },
+            expiryDate: expiryDate
+          });
 
-        let saveSub = await subscription.save();
-        if (!saveSub) throw createError.BadRequest('Failed to save a Subscription');
+          let saveSub = await subscription.save();
+          if (!saveSub) throw createError.BadRequest('Failed to save a Subscription');
 
-        let data = [];
-        data.push({
-          item: package.name,
-          description: package.description,
-          price: `R${package.price}`
-        });
+          let data = [];
+          data.push({
+            item: package.name,
+            description: package.description,
+            price: `R${package.price}`
+          });
 
-        receiptEmail.sendReceipt({
-          package: data,
-          email: user.email,
-          username: user.firstName + ' ' + user.lastName
-        });
+          receiptEmail.sendReceipt({
+            package: data,
+            email: user.email,
+            username: user.firstName + ' ' + user.lastName
+          });
 
-        res.send(saveSub);
+          res.send(saveSub);
+        }
+        else {
+          throw createError.InternalServerError()
+        }
       })
         .catch(function (error) {
           console.log(error);
@@ -127,7 +138,6 @@ exports.buyPackage = async (req, res, next) => {
         });
     }
 
-    // res.send({ meg: 'buy package' });
   }
   catch (error) {
     console.log(error)
