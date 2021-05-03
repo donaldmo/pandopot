@@ -116,7 +116,7 @@ exports.addPackage = async (req, res, next) => {
 exports.editPackage = async (req, res, next) => {
   try {
     let update = {};
-    // console.log('body: ', req.body)
+    console.log('body: ', req.body)
 
     if (req.body.name) update.name = req.body.name;
     if (req.body.price) update.price = req.body.price;
@@ -136,7 +136,7 @@ exports.editPackage = async (req, res, next) => {
       _id: req.body.id,
       "author.userId": req.payload.aud
     }, update);
-    // console.log('updatePackage: ', updatePackage);
+    console.log('updatePackage: ', updatePackage);
 
     // if (!updatePackage) throw createError.NotFound();
 
@@ -144,7 +144,7 @@ exports.editPackage = async (req, res, next) => {
       _id: req.body.id,
       "author.userId": req.payload.aud
     });
-
+    
     res.send(updatePackage);
   }
   catch (error) {
@@ -220,6 +220,7 @@ exports.getAllCategories = async (req, res, next) => {
   try {
     const categories = await ProductCategory.find();
     if (!categories) throw createError.NotFound('No categories found');
+    console.log('categories: ', categories);
 
     res.send(categories);
   }
@@ -234,8 +235,6 @@ exports.getAdminCategories = async (req, res, next) => {
     const categories = await ProductCategory.find({
       "author.userId": req.payload.aud
     });
-
-    // if (!categories) 
 
     res.send(categories);
   }
@@ -784,9 +783,10 @@ exports.editPost = async (req, res, next) => {
       throw createError.BadRequest('Error, Nothing to update.')
     }
     
+    console.log('update: ', update)
     const updatePost = await Post.updateOne({
       _id: id,
-    }, req.body);
+    }, update);
 
     console.log('updatePost: ', updatePost)
 
