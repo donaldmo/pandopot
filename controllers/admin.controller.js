@@ -779,11 +779,12 @@ exports.editPost = async (req, res, next) => {
     if (req.body.contents) update.contents = req.body.contents;
     if (req.body.featuredImage) update.featuredImage = req.body.featuredImage;
     if (req.body.postType) update.postType = req.body.postType;
-    if (req.body.youtubeEmbed) update.postType = req.body.youtubeEmbed;
+    if (req.body.youtubeEmbed) update.youtubeEmbed = req.body.youtubeEmbed;
 
     if (!Object.keys(update).length) {
       throw createError.BadRequest('Error, Nothing to update.')
     }
+  console.log('body: ', req.body)
     
     const updatePost = await Post.updateOne({
       _id: id,
@@ -791,7 +792,6 @@ exports.editPost = async (req, res, next) => {
 
     res.send(updatePost);
   }
-
   catch (error) {
     console.log(error);
     if (error.isJoi === true) error.status = 422;
