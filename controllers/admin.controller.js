@@ -778,17 +778,15 @@ exports.editPost = async (req, res, next) => {
     if (req.body.description) update.description = req.body.description;
     if (req.body.contents) update.contents = req.body.contents;
     if (req.body.featuredImage) update.featuredImage = req.body.featuredImage;
+    if (req.body.postType) update.postType = req.body.postType;
 
     if (!Object.keys(update).length) {
       throw createError.BadRequest('Error, Nothing to update.')
     }
     
-    console.log('update: ', update)
     const updatePost = await Post.updateOne({
       _id: id,
     }, update);
-
-    console.log('updatePost: ', updatePost)
 
     res.send(updatePost);
   }
