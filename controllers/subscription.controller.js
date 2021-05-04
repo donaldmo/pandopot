@@ -18,6 +18,7 @@ exports.getSubscriptions = async (req, res, next) => {
 
     if (!subscriptions) throw createError.NotFound();
     // console.log('subscriptions: ', subscriptions);
+    subscriptions.map(item => console.log('id: ',item._id, 'usage: ', item.usage))
 
     res.send(subscriptions);
   }

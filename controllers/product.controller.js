@@ -65,6 +65,7 @@ exports.getUserProduct = async (req, res, next) => {
 
 exports.addProduct = async (req, res, next) => {
   try {
+    console.log('body: ', req.body, 'query: ', req.query)
     const user = await User.findOne({ _id: req.payload.aud });
     if (!user) throw createError.NotFound('User not registered');
 
@@ -91,13 +92,13 @@ exports.addProduct = async (req, res, next) => {
     }
 
     const getSubscription = await Subscription.findOne({
-      id: req.body._id,
+      _id: req.query.subscriptionId,
       "subscriber.userId": req.payload.aud
     });
+    console.log('getSubscription: ', getSubscription)
 
     if (!getSubscription) throw createError.BadRequest('No Subscription Found!');
     let { usage, expiryDate } = getSubscription._doc;
-    console.log('subscription: ', getSubscription)
 
     if (usage.used === true) {
       throw createError.BadRequest('This subscription is already used')
@@ -127,7 +128,7 @@ exports.addProduct = async (req, res, next) => {
           usage: {
             used: true,
             usedDate: Date.now(),
-            item: {
+            usenOnItem: {
               itemType: 'product',
               name: product.name,
               itemId: product._id
