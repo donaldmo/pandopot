@@ -98,7 +98,6 @@ exports.getMarkets = async (req, res, next) => {
 
 exports.getMarketsByCategory = async (req, res, next) => {
   try {
-    console.log(req.query)
     console.log('categoryId: ', req.query.id || req.body.id);
     const markets = await Market.find({
       "category.categoryId": req.query.id || req.body.id
