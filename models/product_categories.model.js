@@ -7,6 +7,10 @@ const ProductCategoriesSchema = new Schema({
     required: true,
     unique: true
   },
+  categoryType: {
+    type: String,
+    default: 'product'
+  },
   description: String,
   icon: String,
   author: {

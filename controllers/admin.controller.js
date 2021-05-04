@@ -218,9 +218,14 @@ exports.addCategories = async (req, res, next) => {
 
 exports.getAllCategories = async (req, res, next) => {
   try {
-    const categories = await ProductCategory.find();
+    let filter = {}
+    if (req.query.categoryType) filter = {
+      categoryType: req.query.categoryType
+    }
+    console.log('filter: ', filter);
+
+    const categories = await ProductCategory.find(filter);
     if (!categories) throw createError.NotFound('No categories found');
-    console.log('categories: ', categories);
 
     res.send(categories);
   }
@@ -280,9 +285,11 @@ exports.getCategory = async (req, res, next) => {
 exports.editAdminCategory = async (req, res, next) => {
   try {
     let update = {};
+    console.log('body: ', req.body)
     if (req.body.name) update.name = req.body.name;
     if (req.body.description) update.description = req.body.description;
     if (req.body.icon) update.icon = req.body.icon;
+    if (req.body.categoryType) update.categoryType = req.body.categoryType;
 
     if (Object.keys(update).length === 0 && update.constructor === Object) {
       throw createError.BadRequest('No update info received');
