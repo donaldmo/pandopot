@@ -219,10 +219,12 @@ exports.addCategories = async (req, res, next) => {
 exports.getAllCategories = async (req, res, next) => {
   try {
     let filter = {}
-    if (req.query.categoryType) filter = {
+    let categoryType = req.query.categoryType;
+    if (categoryType !== '' && categoryType !== undefined) filter = {
       categoryType: req.query.categoryType
     }
-    console.log('filter: ', filter);
+
+    console.log(':: GET_ALL_CATEGORIES filter: ', filter);
 
     const categories = await ProductCategory.find(filter);
     if (!categories) throw createError.NotFound('No categories found');
