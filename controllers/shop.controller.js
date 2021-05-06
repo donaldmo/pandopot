@@ -271,10 +271,11 @@ exports.getCustomerSingleOrder = async (req, res, next) => {
 
 exports.search = async (req, res, next) => {
   try {
+    console.log('query: ', req.query);
+
     let { size, page } = pagenate(req.query);
     const limit = parseInt(size);
     const skip = (parseInt(page) - 1) * parseInt(size);
-    console.log('limit: ', limit, 'skip: ', skip);
 
     let filter = {};
     const { query, categoryId } = req.query;
@@ -284,7 +285,7 @@ exports.search = async (req, res, next) => {
 
     console.log('shop.controller.js:273:: filter: ', filter);
     let getProducts = await Product.find(filter, {}, { limit, skip })
-    console.log(getProducts)
+    // console.log(getProducts);
 
     res.send(getProducts);
   }
