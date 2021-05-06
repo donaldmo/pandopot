@@ -26,10 +26,12 @@ exports.getCategoryProducts = async (req, res, next) => {
     let { size, page } = pagenate(req.query);
     const limit = parseInt(size);
     const skip = (parseInt(page) - 1) * parseInt(size);
-    console.log('limit: ', limit, 'skip: ', skip);
+    // console.log('limit: ', limit, 'skip: ', skip);
 
     if (!req.query.id) throw createError.BadRequest('No category id provided');
+    console.log('categoryId: ', req.query.id)
     const products = await Product.find({ "category.id": req.query.id }, {}, { limit, skip });
+    console.log('products 1: ', products[0]);
 
     if (!products) throw createError.NotFound();
     res.send(products);

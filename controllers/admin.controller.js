@@ -224,8 +224,6 @@ exports.getAllCategories = async (req, res, next) => {
       categoryType: req.query.categoryType
     }
 
-    console.log(':: GET_ALL_CATEGORIES filter: ', filter);
-
     const categories = await ProductCategory.find(filter);
     if (!categories) throw createError.NotFound('No categories found');
 
