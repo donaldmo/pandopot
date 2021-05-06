@@ -1,10 +1,13 @@
-Hi Rebualefe Donald Motswiri,
+Hi Rebualefe Motswiri,
 
-Hi, i would like to make an appointment        
+Your order has been processed successfully.        
 
-Detail: phone: +27631959916, emial: domotswiri@gmail.com.        
+You can check the status of your order and more in your dashboard:        
+http://localhost:3000/my-subscriptions        
+
+We thank you for your purchase.        
 
 Yours truly,  
 Pandopot
 
-&copy; 2021 <a href="https://pandopot.com/" target="_blank">Pandopot</a>. All rights reserved.
+&copy; 2021 <a href="https://mailgen.js/" target="_blank">Pandopot</a>. All rights reserved.

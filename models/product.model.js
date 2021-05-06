@@ -1,4 +1,3 @@
-const { string } = require('@hapi/joi');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -14,6 +13,10 @@ const ProductSchema = new Schema({
       type: Schema.Types.ObjectId, 
       required: true, 
       ref: 'ProductCategory'
+    },
+    subCategory: {
+      type: String,
+      default: 'none'
     }
   },
 

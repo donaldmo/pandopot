@@ -88,7 +88,8 @@ exports.addProduct = async (req, res, next) => {
 
     result.category = {
       name: getCategory.name,
-      id: getCategory._id
+      id: getCategory._id,
+      subCategory: req.body.subCategory || ''
     }
 
     const getSubscription = await Subscription.findOne({
@@ -137,8 +138,7 @@ exports.addProduct = async (req, res, next) => {
         });
 
         console.log('setUsed: ', setUsed);
-
-        res.send({ message: 'add product is under construction ' });
+        res.send(saveProduct);
       }
     }
 
@@ -182,7 +182,7 @@ exports.updateProduct = async (req, res, next) => {
     let currentImages = getProduct.images || [];
     if (req.body.imagesUpdate) {
       if (!currentImages.length) update.images = req.body.images;
-      else update.images = [...currentImages,...req.body.images]
+      else update.images = [...currentImages, ...req.body.images]
     }
 
     else if (Object.keys(req.body).length) {
@@ -366,6 +366,33 @@ exports.boostProduct = async (req, res, next) => {
     //     next(error);
     //   });
     // }
+  }
+
+  catch (error) {
+    console.log(error)
+    if (error.isJoi === true) error.status = 422;
+    next(error);
+  }
+}
+
+exports.getPlantsTypes = async (req, res, next) => {
+  try {
+    let filter = {};
+    console.log(req.query)
+
+    let subCategory = req.query.subCategory;
+    if (subCategory !== undefined && subCategory !== '' ) {
+      filter = {
+        "category.subCategory": subCategory
+      }
+    }
+    console.log('filter: ', filter);
+
+    const plantsTypes = await Product.find(filter);
+
+    console.log('plantsTypes:: herbs: ', plantsTypes);
+
+    res.send(plantsTypes);
   }
 
   catch (error) {

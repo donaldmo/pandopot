@@ -2,14 +2,25 @@ const createError = require('http-errors');
 const ms = require('ms');
 const User = require('../models/User.model');
 const { authSchema, emailSchema } = require('../helpers/validation_schema');
-const { signAccessToken, signRefreshToken, verifyRefreshToken, generateConfirmToken, generateResetToken } = require('../helpers/jwt_helper');
+
+const { 
+  generatePassword, 
+  signAccessToken, 
+  signRefreshToken, 
+  verifyRefreshToken, 
+  generateConfirmToken, 
+  generateResetToken 
+} = require('../helpers/jwt_helper');
 
 const sendEmail = require('../helpers/send_email');
 
 exports.register = async (req, res, next) => {
   try {
+    console.log('user.controller.js::register: body: ', req.body)
+    const hashedPassword = await generatePassword(req.body.password);
+    console.log('hashedPassword: ', hashedPassword)
 
-    const result = await authSchema.validateAsync({ email: req.body.email, password: req.body.password });
+    const result = await authSchema.validateAsync({ email: req.body.email, password: hashedPassword });
     const doesExist = await User.findOne({ email: result.email });
     if (doesExist) throw createError.Conflict(`${result.email} is already registered`);
 

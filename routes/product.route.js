@@ -30,5 +30,6 @@ router.delete('/delete-product/:id', verifyAccessToken, productController.delete
 router.put('/update-product', verifyAccessToken, productController.updateProduct);
 
 router.post('/boost-product', verifyAccessToken, productController.boostProduct);
+router.get('/plants-types', productController.getPlantsTypes);
 
 module.exports = router; 

@@ -1,8 +1,20 @@
 const JWT = require('jsonwebtoken');
 const createError = require('http-errors');
+const bcrypt = require('bcrypt');
 const { emailSchema } = require('../helpers/validation_schema');
 
 module.exports = {
+  generatePassword: async (password) => {
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      return hashedPassword;
+    }
+    catch (error) {
+      next(error);
+    }
+  },
+
   signAccessToken: (userId) => {
     return new Promise((resolve, reject) => {
       const payload = {};

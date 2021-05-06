@@ -40,6 +40,7 @@ const productSchema = Joi.object({
 const productUpdateSchema = Joi.object({
   name: Joi.string(),
   category: Joi.string(),
+  subCaterory: Joi.string(),
   payment: Joi.string(),
   price: Joi.number(),
   description: Joi.string(),
