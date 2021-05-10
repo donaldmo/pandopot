@@ -86,7 +86,7 @@ module.exports = {
           button: {
             color: '#DC4D2F',
             text: 'Reset your password',
-            link: `http://localhost:3000/new-password?token=${resetToken}` // https:pandopot.com/reset-password?token=${token}
+            link: `https://pandopot.com/new-password?token=${resetToken}` // https:pandopot.com/reset-password?token=${token}
           }
         },
         outro: 'If you did not request a password reset, no further action is required on your part.'
