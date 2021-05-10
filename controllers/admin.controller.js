@@ -6,6 +6,7 @@ const ProductCategory = require('../models/product_categories.model');
 const Boosting = require('../models/boosting.model');
 const Terms = require('../models/terms.model');
 const Post = require('../models/post.model');
+const { pagenate } = require('../helpers/pagenate');
 
 exports.getAdminAccount = async (req, res, next) => {
   try {
@@ -756,6 +757,7 @@ exports.getStorePosts = async (req, res, next) => {
     let query = {};
     if (req.query.postType === 'tutorial') query.postType = 'tutorial';
     if (req.query.postType === 'help') query.postType = 'help';
+    console.log('query: ', query)
 
     const posts = await Post.find(query, {}, { limit, skip });
 
