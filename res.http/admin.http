@@ -111,6 +111,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTQwNzUxM
   "id": "603417dbf3b65c088862e79a"
 }
 
+### Get categories
+GET http://localhost:4000/admin/categories
+Content-Type: application/json
+
 ### Get category
 GET http://localhost:4000/admin/category
 Content-Type: application/json

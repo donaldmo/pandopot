@@ -3,7 +3,7 @@ const User = require('../models/User.model');
 const { packageSchema, adminPaymentGatewaySchema } = require('../helpers/validation_schema');
 const Package = require('../models/packages.model');
 const Subscription = require('../models/subscription.model');
-const receiptEmail = require('../helpers/package_receipt_email')
+const sendEmail = require('../helpers/send_email');
 
 var axios = require('axios');
 var qs = require('qs');
@@ -120,10 +120,11 @@ exports.buyPackage = async (req, res, next) => {
             price: `R${package.price}`
           });
 
-          receiptEmail.sendReceipt({
+          sendEmail.sendReceipt({
             package: data,
             email: user.email,
-            username: user.firstName + ' ' + user.lastName
+            username: user.firstName + ' ' + user.lastName,
+            subject: 'Pandopot Package Purchase'
           });
 
           res.send(saveSub);

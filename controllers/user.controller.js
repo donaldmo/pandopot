@@ -2,6 +2,8 @@ const createError = require('http-errors');
 const ms = require('ms');
 const User = require('../models/User.model');
 const { authSchema, emailSchema } = require('../helpers/validation_schema');
+const Product = require('../models/product.model');
+const Market = require('../models/market.model');
 
 const { 
   generatePassword, 
@@ -146,6 +148,7 @@ exports.getUserAccount = async (req, res, next) => {
 
 exports.updateUserAccount = async (req, res, next) => {
   try {
+    console.log(req.body)
     // throw createError.BadRequest('User details area required');
     if (!req.body) throw createError.BadRequest('User details area required');
     let update = {};
@@ -181,6 +184,9 @@ exports.updateUserAccount = async (req, res, next) => {
     if (req.body.secret_key) {
       update.paymentGateway = { secret_key: req.body.secret_key }
     }
+
+    if (req.body.featuredImage) update.featuredImage = req.body.featuredImage;
+    console.log('update: ', update)
 
     const saveUser = await User.findOneAndUpdate({ _id: req.payload.aud }, update);
     let user = await User.findById(saveUser._id);
@@ -248,7 +254,6 @@ exports.resetPassword = async (req, res, next) => {
   try {
     const user = new User();
     const newPassword = await user.generatePassword(req.body.password);
-    console.log('new password', newPassword);
 
     const resetPassword = await User.updateOne({
       email: req.payload.aud,
@@ -260,7 +265,7 @@ exports.resetPassword = async (req, res, next) => {
       });
 
     if (resetPassword.nModified === 0) {
-      throw createError.BadRequest('Reset Password Failed, try requesting new password reset');
+      throw createError.BadRequest('Reset Password Failed');
     }
 
     res.send(resetPassword);
@@ -287,6 +292,73 @@ exports.contactUser = async (req, res, next) => {
     });
 
     res.send({ message: 'message sent'});
+  }
+
+  catch (error) {
+    console.log(error)
+    if (error.isJoi === true) error.status = 422;
+    next(error);
+  }
+}
+
+exports.getSingleUser = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ _id: req.params.id || req.query.id });
+    console.log('user: ', user);
+    res.send(user);
+  }
+
+  catch (error) {
+    console.log(error)
+    if (error.isJoi === true) error.status = 422;
+    next(error);
+  }
+}
+
+exports.getUsers = async (req, res, next) => {
+  try {
+    const users = await User.find({ confirmedEmail: true });
+    console.log('users: ', users);
+    res.send(users);
+  }
+
+  catch (error) {
+    console.log(error)
+    if (error.isJoi === true) error.status = 422;
+    next(error);
+  }
+}
+
+exports.getUserItems = async (req, res, next) => {
+  try {
+    console.log('query: ', req.query);
+    let items = {
+      products: null,
+      market: null
+    };
+
+    if (req.query.itemType === 'market') {
+      console.log('type: ', req.query.itemType)
+      let getMarket = await Market.find({ "author.userId": req.query.userId });
+      items.market = getMarket;
+    }
+
+    else if (req.query.itemType === 'product') {
+      console.log('type: ', req.query.itemType)
+      let getProducts = await Product.find({ "author.userId": req.query.userId });
+      items.products = getProducts;
+    }
+
+    else {
+      console.log('type: ', 'nada')
+      let products = await Product.find({ "author.userId": req.query.userId });
+      let market = await Market.find({ "author.userId": req.query.userId });
+      items.products = products;
+      items.market = market;
+    }
+
+    // console.log('items: ', items);
+    res.send(items);
   }
 
   catch (error) {

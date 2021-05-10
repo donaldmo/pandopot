@@ -24,7 +24,9 @@ router.post('/my-account/update-payment-gateway', verifyAccessToken, userControl
 
 router.post('/user/contact-user', userController.contactUser);
 
-
+router.get('/users', userController.getUsers);
+router.get('/single-user/:id', userController.getSingleUser)
+router.get('/user-items', userController.getUserItems)
 
 // for testing sendign emails
 router.post('/sendemail', userController.sendEmail);

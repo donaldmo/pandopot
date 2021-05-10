@@ -30,6 +30,12 @@ const UserSchema = new Schema({
     city: String,
     apartment: String
   },
+
+  featuredImage: {
+    imageName: String,
+    url: String
+  },
+
   paymentGateway: {
     secret_key: String,
     public_key: String
@@ -59,6 +65,16 @@ const UserSchema = new Schema({
       }
     ]
   }
+});
+
+UserSchema.index({
+  firstName: 'text',
+  lastName: 'text',
+}, {
+  weights: {
+    firstName: 5,
+    lastName: 1,
+  },
 });
 
 // UserSchema.pre('save', async function (next) {

@@ -55,4 +55,15 @@ const MarketSchema = new Schema({
 },
 { timestamps: true });
 
-module.exports = mongoose.model('Market', MarketSchema);
+MarketSchema.index({
+  name: 'text',
+  description: 'text',
+}, {
+  weights: {
+    name: 5,
+    description: 1,
+  },
+});
+
+const Market = mongoose.model('Market', MarketSchema);
+module.exports = Market;

@@ -81,6 +81,11 @@ Content-Type: application/json
   "password": "password123"
 }
 
+### GET users
+GET http://localhost:4000/auth/users
+Content-Type: application/json
+
+
 ### Get Subscription Route
 GET http://localhost:4000/subscription/get-subscription
 Content-Type: application/json

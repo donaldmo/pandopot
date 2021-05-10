@@ -50,7 +50,7 @@ const mongoDBStore = new MongoDBStore({
   collection: 'session',
   ttl: parseInt(process.env.SESSION_LIFETIME) / 1000
 });
-
+console.log('SESSION: ',  process.env.SESSION_SECRET)
 app.use(session({
   name: process.env.SESSION_NAME,
   secret: process.env.SESSION_SECRET,

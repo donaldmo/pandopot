@@ -224,12 +224,17 @@ exports.getAllCategories = async (req, res, next) => {
       categoryType: req.query.categoryType
     }
 
+    // console.log(':: FILTER: ' ,filter);
+
     const categories = await ProductCategory.find(filter);
-    if (!categories) throw createError.NotFound('No categories found');
+
+    // if (!categories) throw createError.NotFound('No categories found');
+    // console.log('CATEGORIES: ', categories)
 
     res.send(categories);
   }
   catch (error) {
+    console.log(error)
     if (error.isJoi === true) error.status = 422;
     next(error);
   }
@@ -364,6 +369,22 @@ exports.getPaymentGateway = async (req, res, next) => {
       _id: req.payload.aud
     }).select("adminPaymentGateway");
     if (!admin) throw createError.NotFound('Admin could not be found.');
+
+    let { adminPaymentGateway } = admin;
+
+    res.send(adminPaymentGateway)
+  }
+  catch (error) {
+    if (error.isJoi === true) error.status = 422;
+    next(error);
+  }
+}
+
+exports.getStorePaymentGateway = async (req, res, next) => {
+  try {
+    const admin = await User.findOne({
+      "role": "admin"
+    }).select("adminPaymentGateway")
 
     let { adminPaymentGateway } = admin;
 
@@ -728,8 +749,15 @@ exports.getAdminPosts = async (req, res, next) => {
 
 exports.getStorePosts = async (req, res, next) => {
   try {    
-    const posts = await Post.find();
-    console.log('posts: ', posts)
+    let { size, page } = pagenate(req.query);
+    const limit = parseInt(size);
+    const skip = (parseInt(page) - 1) * parseInt(size);
+
+    let query = {};
+    if (req.query.postType === 'tutorial') query.postType = 'tutorial';
+    if (req.query.postType === 'help') query.postType = 'help';
+
+    const posts = await Post.find(query, {}, { limit, skip });
 
     res.send(posts);
   }

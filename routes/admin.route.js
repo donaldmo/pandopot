@@ -5,7 +5,7 @@ const { verifyAccessToken } = require('../helpers/jwt_helper');
 
 router.get('/', verifyAccessToken, adminController.getAdminAccount);
 
-router.get('/packages', adminController.getAllPackages); //done
+router.get('/packages', adminController.getAllPackages);
 router.post('/package', adminController.getPackage);
 
 router.post('/get-package', verifyAccessToken, adminController.getAdminPackage);
@@ -26,7 +26,8 @@ router.delete('/delete-category/:id', verifyAccessToken, adminController.deleteC
 
 router.post('/add-categories', verifyAccessToken, adminController.addCategories);
 router.post('/add-admin-payment-gateway', verifyAccessToken, adminController.addAdminPaymentGateway);
-router.get('/get-payment-gateway', verifyAccessToken, adminController.getPaymentGateway);
+router.get('/get-payment-gateway', adminController.getPaymentGateway);
+router.get('/store-payment-gateway', adminController.getStorePaymentGateway);
 router.get('/payment-gateway', adminController.getShopPaymentGateway);
 
 router.get('/get-users', verifyAccessToken, adminController.getUsers);
@@ -48,8 +49,10 @@ router.put('/edit-terms/:id', verifyAccessToken, adminController.editTerms);
 router.post('/add-post', verifyAccessToken, adminController.addPost);
 router.get('/get-posts', verifyAccessToken, adminController.getAdminPosts);
 router.get('/get-post/:id', verifyAccessToken, adminController.getAdminPost);
+
 router.get('/posts', adminController.getStorePosts);
 router.get('/single-post', adminController.getStorePost);
+
 router.put('/edit-post/:id', verifyAccessToken, adminController.editPost);
 router.delete('/delete-post/:id', verifyAccessToken, adminController.deletePost);
 

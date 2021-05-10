@@ -2,11 +2,13 @@ const User = require('../models/User.model');
 const Product = require('../models/product.model');
 const createError = require('http-errors');
 const Order = require('../models/order.model');
-const { pagenate } = require('../helpers/pagenate')
+const { pagenate } = require('../helpers/pagenate');
 
 var axios = require('axios');
 var qs = require('qs');
 var btoa = require('btoa');
+const Market = require('../models/market.model');
+const sendEmail = require('../helpers/send_email');
 
 exports.getProducts = async (req, res, next) => {
   try {
@@ -272,22 +274,53 @@ exports.getCustomerSingleOrder = async (req, res, next) => {
 exports.search = async (req, res, next) => {
   try {
     console.log('query: ', req.query);
+    let results = [];
 
     let { size, page } = pagenate(req.query);
     const limit = parseInt(size);
     const skip = (parseInt(page) - 1) * parseInt(size);
 
     let filter = {};
-    const { query, categoryId } = req.query;
-
-    if (categoryId) filter = { ...filter, "category.id": categoryId };
+    let marketFilter = {};
+    const { query, categoryId, categoryType } = req.query;
     if (query) filter = { ...filter, $text: { $search: query } };
 
-    console.log('shop.controller.js:273:: filter: ', filter);
-    let getProducts = await Product.find(filter, {}, { limit, skip })
-    // console.log(getProducts);
+    // if categoryType is Markets searh only market
+    if (categoryType === 'market') {
+      console.log('searching market')
+      if (categoryId) filter = { ...filter, "category.categoryId": categoryId };
+      console.log('filter: ', filter);
+      results = await Market.find(filter, {}, { limit, skip });
+    }
 
-    res.send(getProducts);
+    // if category type is 'product || undefined' search only products
+    else if (categoryType === 'product') {
+      console.log('searching product')
+      if (categoryId) filter = { ...filter, "category.id": categoryId };
+      console.log('filter: ', filter);
+      results = await Product.find(filter, {}, { limit, skip });
+    }
+
+    else { 
+      if (query) marketFilter = { $text: { $search: query } };
+      if (categoryId) {
+        filter = { ...filter, "category.id": categoryId };
+        marketFilter = { ...marketFilter, "category.categoryId": categoryId };
+      }
+
+      console.log('filter: ', filter);
+      console.log('marketFilter: ', marketFilter);
+
+      let results0 = await Product.find(filter, {}, { limit, skip });
+      let results1 = await Market.find(marketFilter, {}, { limit, skip });
+      console.log(results1)
+
+      if (results0.length) results = [...results0];
+      if (results1.length) results = [...results, ...results1];
+    }
+    console.log('results:', results);
+
+    res.send(results);
   }
   catch (error) {
     if (error.isJoi === true) error.status = 422;
@@ -354,8 +387,22 @@ exports.test = async (req, res, next) => {
         if (!saveOrder) throw createError.BadRequest('Failed to place an order');
         // console.log(saveOrder);
 
-        // let removeCartItem = await user.removeFromCart(orderProduct._id);
+        let removeCartItem = await user.removeFromCart(orderProduct._id);
         // send email to the client about the order
+        let data = [];
+
+        data.push({
+          item: orderProduct.name,
+          description: `ID: ${orderProduct._id}`,
+          price: `R${orderProduct.price}`,
+        });
+
+        sendEmail.sendReceipt({
+          package: data,
+          email: user.email,
+          username: user.firstName + ' ' + user.lastName,
+          subject: 'Your order has been received'
+        });
 
         res.send(saveOrder)
       })
@@ -376,21 +423,13 @@ exports.test = async (req, res, next) => {
 
 exports.getBoostedProducts = async (req, res, next) => {
   try {
-    // let days = -1;
-    // var now = new Date().getTime();
-    // futureDate = now + (1000 * 60 * 60 * 24 * days);
-    // console.log('expiryDate: ', futureDate, 'today: ', Date.now());
-
-    // if (futureDate < Date.now()) console.log('expired');
-    // else console.log('not expired');
-
     console.log('params: ', req.params);
     let products = [];
 
     if (req.params.boostName === 'featured') {
       products = await Product.find({
         boostInfo: { $elemMatch: { name: "Featured Product", expiryDate: { $gt: Date.now() } } }
-      })
+      }, { $sample: { size: 3 } }, {});
     }
 
     if (req.params.boostName === 'slider') {
@@ -398,6 +437,7 @@ exports.getBoostedProducts = async (req, res, next) => {
         boostInfo: { $elemMatch: { name: "Slider", expiryDate: { $gt: Date.now() } } }
       });
     }
+    console.log('boosted Products: ', products)
 
     // todo: limit to 6, get only the NOT EXPIRED, shuffle the whole document using aggregation shuffle
 
@@ -405,6 +445,23 @@ exports.getBoostedProducts = async (req, res, next) => {
   }
 
   catch (error) {
+    if (error.isJoi === true) error.status = 422;
+    next(error);
+  }
+}
+
+exports.contactUs = async (req, res, next) => {
+  try {
+    console.log('body: ', req.body);
+    sendEmail.contactUs({
+      data: req.body
+    });
+
+    res.send({ message: 'message sent'});
+  }
+
+  catch (error) {
+    console.log(error)
     if (error.isJoi === true) error.status = 422;
     next(error);
   }

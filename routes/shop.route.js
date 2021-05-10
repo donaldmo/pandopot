@@ -29,6 +29,7 @@ router.get('/get-customer-single-order/:id', verifyAccessToken, shopController.g
 router.get('/search', shopController.search);
 
 router.get('/boosted-products/:boostName', shopController.getBoostedProducts);
+router.post('/contact-us', shopController.contactUs);
 
 // router.get('/store-product/:id', productController.getStoreProduct);
 // router.post('/get-product', verifyAccessToken, productController.getUserProduct);
