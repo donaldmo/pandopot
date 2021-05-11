@@ -4,14 +4,15 @@ const User = require('../models/User.model');
 const { authSchema, emailSchema } = require('../helpers/validation_schema');
 const Product = require('../models/product.model');
 const Market = require('../models/market.model');
+const request = require('request');
 
-const { 
-  generatePassword, 
-  signAccessToken, 
-  signRefreshToken, 
-  verifyRefreshToken, 
-  generateConfirmToken, 
-  generateResetToken 
+const {
+  generatePassword,
+  signAccessToken,
+  signRefreshToken,
+  verifyRefreshToken,
+  generateConfirmToken,
+  generateResetToken
 } = require('../helpers/jwt_helper');
 
 const sendEmail = require('../helpers/send_email');
@@ -291,7 +292,7 @@ exports.contactUser = async (req, res, next) => {
       }
     });
 
-    res.send({ message: 'message sent'});
+    res.send({ message: 'message sent' });
   }
 
   catch (error) {
@@ -359,6 +360,42 @@ exports.getUserItems = async (req, res, next) => {
 
     // console.log('items: ', items);
     res.send(items);
+  }
+
+  catch (error) {
+    console.log(error)
+    if (error.isJoi === true) error.status = 422;
+    next(error);
+  }
+}
+
+exports.subscribe = async (req, res, next) => {
+  try {
+    console.log('body: ', req.body);
+    if (!req.body.email) throw createError.BadRequest('Email is required');
+    let mcData = {
+      members: [{
+        email_address: req.body.email,
+        status: 'pending'
+      }]
+    }
+
+    let mcDataPost = JSON.stringify(mcData);
+
+    let options = {
+      url: 'https://us3.api.mailchimp.com/3.0/lists/5b643c9853',
+      method: 'POST',
+      headers: {
+        Authorization: 'auth d5e59442bd752db3842e581fc458364b-us3'
+      },
+      body: mcDataPost
+    }
+
+    request(options, (err, response, body) => {
+      if (err) throw createError.BadRequest();
+      console.log('body: ', body)
+      res.send({message: 'success'});
+    });
   }
 
   catch (error) {

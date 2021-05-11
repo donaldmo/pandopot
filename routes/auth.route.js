@@ -26,9 +26,12 @@ router.post('/user/contact-user', userController.contactUser);
 
 router.get('/users', userController.getUsers);
 router.get('/single-user/:id', userController.getSingleUser)
-router.get('/user-items', userController.getUserItems)
+router.get('/user-items', userController.getUserItems);
+
+router.post('/subscribe', userController.subscribe);
 
 // for testing sendign emails
 router.post('/sendemail', userController.sendEmail);
+
 
 module.exports = router;

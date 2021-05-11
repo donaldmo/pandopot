@@ -7,6 +7,7 @@ const Boosting = require('../models/boosting.model');
 const Terms = require('../models/terms.model');
 const Post = require('../models/post.model');
 const { pagenate } = require('../helpers/pagenate');
+const Faquestion = require('../models/faquestion.model')
 
 exports.getAdminAccount = async (req, res, next) => {
   try {
@@ -869,6 +870,135 @@ exports.deletePost = async (req, res, next) => {
     });
 
     res.send(deletePost);
+  }
+  catch (error) {
+    if (error.isJoi === true) error.status = 422;
+    next(error);
+  }
+}
+
+exports.addFaq = async (req, res, next) => {
+  try {
+    console.log('body: ', req.body)
+    if (!req.body.faqs) createError.BadRequest('FAQ list can not be empty')
+    const user = await User.findById(req.payload.aud);
+    if (!user) throw createError.Unauthorized();
+
+    // if (user.confirmedEmail === false) throw createError.BadRequest('You need to verify your email first.');
+    if (user.role !== 'admin') {
+      throw createError.Unauthorized();
+    }
+
+    let faquestions;
+    let saveFAQ;
+
+    for (const key in req.body.faqs) {
+      if (req.body.faqs.hasOwnProperty(key)) {
+        const element = req.body.faqs[key];
+        console.log('element: ', element);
+
+        element.author = {
+          name: user.firstName + " " + user.lastName,
+          userId: user._id
+        }
+
+        faquestions = new Faquestion(element);
+        saveFAQ = await faquestions.save();
+      }
+    }
+console.log('saveFAQ: ', saveFAQ)
+    res.send(saveFAQ);
+  }
+  catch (error) {
+    if (error.isJoi === true) error.status = 422;
+    next(error);
+  }
+}
+
+
+exports.getFaq = async (req, res, next) => {
+  try {
+    const faquestion = await Faquestion.find({
+      "author.userId": req.payload.aud
+    });
+
+    res.send(faquestion);
+  }
+  catch (error) {
+    if (error.isJoi === true) error.status = 422;
+    next(error);
+  }
+}
+
+exports.getStoreFaq = async (req, res, next) => {
+  try {
+    const faquestion = await Faquestion.find();
+
+    res.send(faquestion);
+  }
+  catch (error) {
+    if (error.isJoi === true) error.status = 422;
+    next(error);
+  }
+}
+
+exports.getSingleFaq = async (req, res, next) => {
+  try {
+    console.log(req.query.id)
+    const faquestion = await Faquestion.findOne({
+      _id: req.query.id,
+      "author.userId": req.payload.aud
+    });
+    if (!faquestion) throw createError.NotFound();
+
+    res.send(faquestion);
+  }
+  catch (error) {
+    if (error.isJoi === true) error.status = 422;
+    next(error);
+  }
+}
+
+exports.editFaq = async (req, res, next) => {
+  try {
+
+    let update = {};
+    console.log('body: ', req.body)
+    if (req.body.question) update.question = req.body.question;
+    if (req.body.answer) update.answer = req.body.answer;
+
+    if (Object.keys(update).length === 0 && update.constructor === Object) {
+      throw createError.BadRequest('No update info received');
+    }
+
+    const updateFaquestion = await Faquestion.updateOne({
+      _id: req.body.id,
+      "author.userId": req.payload.aud
+    }, update);
+
+    if (updateFaquestion.nModified === 0) {
+      throw createError.BadRequest('Failed to update');
+    }
+
+    res.send(updateFaquestion);
+  }
+  catch (error) {
+    if (error.isJoi === true) error.status = 422;
+    next(error);
+  }
+}
+
+exports.deleteFaq = async (req, res, next) => {
+  try {
+    const deleteFaquestion = await Faquestion.deleteOne({
+      _id: req.params.id,
+      "author.userId": req.payload.aud
+    });
+    if (deleteFaquestion.deletedCount === 0) {
+      throw createError.BadRequest('Failed to delete');
+    }
+
+    res.send(deleteFaquestion);
   }
   catch (error) {
     if (error.isJoi === true) error.status = 422;

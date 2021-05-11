@@ -1,11 +1,11 @@
-Hi domotswiri@gmail.com,
+Hi Rebualefe Motswiri,
 
-You have received this email because a password reset request for your account was received.        
+Your order has been processed successfully.        
 
-Click the button below to reset your password:        
-http://localhost:3000/new-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MjA2ODMzOTQsImV4cCI6MTYyMDc2OTc5NCwiYXVkIjoiZG9tb3Rzd2lyaUBnbWFpbC5jb20iLCJpc3MiOiJwaWNrdXJwYWdlLmNvbSJ9.r1hg2D-sHafbRv19MzBmSU_gRaHSwJVhCSb24UyJIUs        
+You can check the status of your order and more in your dashboard:        
+https://pandopot.com/my-subscriptions        
 
-If you did not request a password reset, no further action is required on your part.        
+We thank you for your purchase.        
 
 Yours truly,  
 Pandopot

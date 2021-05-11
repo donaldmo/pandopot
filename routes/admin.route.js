@@ -56,4 +56,12 @@ router.get('/single-post', adminController.getStorePost);
 router.put('/edit-post/:id', verifyAccessToken, adminController.editPost);
 router.delete('/delete-post/:id', verifyAccessToken, adminController.deletePost);
 
+router.post('/add-faq', verifyAccessToken, adminController.addFaq);
+router.get('/get-faq', verifyAccessToken, adminController.getFaq);
+router.put('/edit-faq', verifyAccessToken, adminController.editFaq);
+router.delete('/delete-faq/:id', verifyAccessToken, adminController.deleteFaq);
+
+router.get('/get-single-faq', verifyAccessToken, adminController.getSingleFaq);
+router.get('/get-store-faq', adminController.getStoreFaq);
+
 module.exports = router; 

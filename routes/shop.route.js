@@ -17,7 +17,7 @@ router.delete('/delete-cart-item/:id', verifyAccessToken, shopController.deleteC
 router.get('/get-cart', verifyAccessToken, shopController.getCart);
 router.get('/get-cart-item/:id', verifyAccessToken, shopController.getCartItem);
 
-router.post('/checkout', verifyAccessToken, shopController.test); // use "shopController.test" for experimental testing else "placeOrder"
+router.post('/checkout', verifyAccessToken, shopController.buyProduct);
 
 router.get('/get-orders', verifyAccessToken, shopController.getOrders);
 router.get('/get-order-item/:id', verifyAccessToken, shopController.getOrderItem);

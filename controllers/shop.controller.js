@@ -301,7 +301,7 @@ exports.search = async (req, res, next) => {
       results = await Product.find(filter, {}, { limit, skip });
     }
 
-    else { 
+    else {
       if (query) marketFilter = { $text: { $search: query } };
       if (categoryId) {
         filter = { ...filter, "category.id": categoryId };
@@ -328,7 +328,7 @@ exports.search = async (req, res, next) => {
   }
 }
 
-exports.test = async (req, res, next) => {
+exports.buyProduct = async (req, res, next) => {
   try {
     let orderProduct = await Product.findById(req.body.cartItem.productId);
     let user = await User.findById(req.payload.aud);
@@ -425,21 +425,47 @@ exports.getBoostedProducts = async (req, res, next) => {
   try {
     console.log('params: ', req.params);
     let products = [];
+    let limitrecords = 4;
 
     if (req.params.boostName === 'featured') {
+      let count = await Product.find({
+        boostInfo: { $elemMatch: { name: "Featured Product", expiryDate: { $gt: Date.now() } } }
+      }).count();
+
+      var random = Math.floor(Math.random() * count)
+      if (count > limitrecords) {
+        console.log('random: ', random)
+        let whatLeft = (count - random);
+        console.log('whatLeft: ', whatLeft)
+        if (whatLeft < limitrecords) random = count - limitrecords;
+        console.log('randomFinal: ', random)
+      }
+      else random = 0;
+
       products = await Product.find({
         boostInfo: { $elemMatch: { name: "Featured Product", expiryDate: { $gt: Date.now() } } }
-      }, { $sample: { size: 3 } }, {});
+      }).skip(random).limit(limitrecords)
     }
 
     if (req.params.boostName === 'slider') {
+      let count = await Product.find({
+        boostInfo: { $elemMatch: { name: "Slider", expiryDate: { $gt: Date.now() } } }
+      }).count();
+
+      var random = Math.floor(Math.random() * count)
+      if (count > limitrecords) {
+        console.log('random: ', random)
+        let whatLeft = (count - random);
+        console.log('whatLeft: ', whatLeft)
+        if (whatLeft < limitrecords) random = count - limitrecords;
+        console.log('randomFinal: ', random)
+      }
+      else random = 0;
+
       products = await Product.find({
         boostInfo: { $elemMatch: { name: "Slider", expiryDate: { $gt: Date.now() } } }
-      });
+      }).skip(random).limit(limitrecords);
     }
-    console.log('boosted Products: ', products)
-
-    // todo: limit to 6, get only the NOT EXPIRED, shuffle the whole document using aggregation shuffle
 
     res.send(products);
   }
@@ -457,7 +483,7 @@ exports.contactUs = async (req, res, next) => {
       data: req.body
     });
 
-    res.send({ message: 'message sent'});
+    res.send({ message: 'message sent' });
   }
 
   catch (error) {
