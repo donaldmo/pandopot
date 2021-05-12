@@ -3,7 +3,7 @@ const uploadFile = require("../helpers/upload_file");
 const upload = async (req, res, next) => {
   try {
     await uploadFile(req, res, next);
-    console.log('file.controller.js ', req.body);
+    // console.log('file.controller.js ', req.body);
 
     if (req.file == undefined) {
       return res.status(400).send({ message: "Please upload a file!" });

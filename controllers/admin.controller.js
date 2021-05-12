@@ -236,7 +236,7 @@ exports.getAllCategories = async (req, res, next) => {
     res.send(categories);
   }
   catch (error) {
-    console.log(error)
+    // console.log(error)
     if (error.isJoi === true) error.status = 422;
     next(error);
   }
@@ -292,7 +292,7 @@ exports.getCategory = async (req, res, next) => {
 exports.editAdminCategory = async (req, res, next) => {
   try {
     let update = {};
-    console.log('body: ', req.body)
+    // console.log('body: ', req.body)
     if (req.body.name) update.name = req.body.name;
     if (req.body.description) update.description = req.body.description;
     if (req.body.icon) update.icon = req.body.icon;
@@ -340,7 +340,7 @@ exports.deleteCategory = async (req, res, next) => {
 
 exports.addAdminPaymentGateway = async (req, res, next) => {
   try {
-    console.log('body: ', req.body)
+    // console.log('body: ', req.body)
     const admin = await User.findOne({
       _id: req.payload.aud,
       role: "admin"
@@ -354,7 +354,7 @@ exports.addAdminPaymentGateway = async (req, res, next) => {
     });
 
     const save = await admin.addAdminPaymentGateway(result);
-    console.log('save: ', save);
+    // console.log('save: ', save);
     res.send(save)
   }
   catch (error) {
@@ -365,7 +365,7 @@ exports.addAdminPaymentGateway = async (req, res, next) => {
 
 exports.getPaymentGateway = async (req, res, next) => {
   try {
-    console.log('admin id: ', req.payload.aud);
+    // console.log('admin id: ', req.payload.aud);
 
     const admin = await User.find({
       _id: req.payload.aud
@@ -406,7 +406,7 @@ exports.getShopPaymentGateway = async (req, res, next) => {
 
     if (!admin) throw createError.NotFound();
     if (!admin.adminPaymentGateway) throw createError.NotFound();
-    console.log('admin.adminPaymentGateway: ', admin)
+    // console.log('admin.adminPaymentGateway: ', admin)
 
     res.send(admin.adminPaymentGateway)
   }
@@ -544,7 +544,7 @@ exports.getBoosting = async (req, res, next) => {
 exports.editBoosting = async (req, res, next) => {
   try {
     let update = {};
-    console.log(req.body);
+    // console.log(req.body);
 
     if (req.body.name) update.name = req.body.name;
     if (req.body.price) update.price = req.body.price;
@@ -559,7 +559,7 @@ exports.editBoosting = async (req, res, next) => {
       _id: req.body.id,
       "author.userId": req.payload.aud
     }, update);
-    console.log('updateBoosting: ', updateBoosting)
+    // console.log('updateBoosting: ', updateBoosting)
 
     if (!updateBoosting) throw createError.NotFound();
 
@@ -567,7 +567,7 @@ exports.editBoosting = async (req, res, next) => {
       _id: req.body.id,
       "author.userId": req.payload.aud
     });
-    console.log('getBoosting', getBoosting)
+    // console.log('getBoosting', getBoosting)
 
     res.send(getBoosting);
   }
@@ -599,11 +599,11 @@ exports.addTerms = async (req, res, next) => {
         userId: user._id
       }
     }
-    console.log('termsData: ', termsData);
+    // console.log('termsData: ', termsData);
 
     const terms = new Terms(termsData);
     let saveTerms = await terms.save();
-    console.log('saveTerms: ', saveTerms)
+    // console.log('saveTerms: ', saveTerms)
 
     res.send(saveTerms);
   }
@@ -633,11 +633,11 @@ exports.addTerms = async (req, res, next) => {
         userId: user._id
       }
     }
-    console.log('termsData: ', termsData);
+    // console.log('termsData: ', termsData);
 
     const terms = new Terms(termsData);
     let saveTerms = await terms.save();
-    console.log('saveTerms: ', saveTerms)
+    // console.log('saveTerms: ', saveTerms)
 
     res.send(saveTerms);
   }
@@ -658,7 +658,7 @@ exports.getTerms = async (req, res, next) => {
     }
     
     const terms = await Terms.findOne();
-    console.log('terms: ', terms)
+    // console.log('terms: ', terms)
 
     res.send(terms);
   }
@@ -671,7 +671,7 @@ exports.getTerms = async (req, res, next) => {
 exports.getStoreTerms = async (req, res, next) => {
   try {    
     const terms = await Terms.findOne();
-    console.log('terms: ', terms)
+    // console.log('terms: ', terms)
 
     res.send(terms);
   }
@@ -683,9 +683,6 @@ exports.getStoreTerms = async (req, res, next) => {
 
 exports.editTerms = async (req, res, next) => {
   try {
-    console.log('body: ', req.body);
-    console.log('query: ', req.body.query);
-    console.log('params: ', req.body.params);
     const user = await User.findById(req.payload.aud);
     if (!user) throw createError.Unauthorized();
 
@@ -719,7 +716,7 @@ exports.getAdminPost = async (req, res, next) => {
     }
 
     const post = await Post.findById(req.body.id || req.params.id || req.query.id);
-    console.log('post: ', post)
+    // console.log('post: ', post)
 
     res.send(post);
   }
@@ -739,7 +736,7 @@ exports.getAdminPosts = async (req, res, next) => {
     }
     
     const posts = await Post.find();
-    console.log('posts: ', posts)
+    // console.log('posts: ', posts)
 
     res.send(posts);
   }
@@ -758,7 +755,7 @@ exports.getStorePosts = async (req, res, next) => {
     let query = {};
     if (req.query.postType === 'tutorial') query.postType = 'tutorial';
     if (req.query.postType === 'help') query.postType = 'help';
-    console.log('query: ', query)
+    // console.log('query: ', query)
 
     const posts = await Post.find(query, {}, { limit, skip });
 
@@ -773,7 +770,7 @@ exports.getStorePosts = async (req, res, next) => {
 exports.getStorePost = async (req, res, next) => {
   try {    
     const post = await Post.findById(req.body.id || req.params.id || req.query.id);
-    console.log('post: ', post)
+    // console.log('post: ', post)
 
     res.send(post);
   }
@@ -785,7 +782,7 @@ exports.getStorePost = async (req, res, next) => {
 
 exports.addPost = async (req, res, next) => {
   try {
-    console.log(req.body)
+    // console.log(req.body)
     const user = await User.findById(req.payload.aud);
     if (!user) throw createError.Unauthorized();
 
@@ -804,11 +801,11 @@ exports.addPost = async (req, res, next) => {
         userId: user._id
       }
     }
-    console.log('postData: ', postData);
+    // console.log('postData: ', postData);
 
     const terms = new Post(postData);
     let savePost = await terms.save();
-    console.log('savePost: ', savePost)
+    // console.log('savePost: ', savePost)
 
     res.send(savePost);
   }
@@ -840,7 +837,7 @@ exports.editPost = async (req, res, next) => {
     if (!Object.keys(update).length) {
       throw createError.BadRequest('Error, Nothing to update.')
     }
-  console.log('body: ', req.body)
+  // console.log('body: ', req.body)
     
     const updatePost = await Post.updateOne({
       _id: id,
@@ -849,7 +846,7 @@ exports.editPost = async (req, res, next) => {
     res.send(updatePost);
   }
   catch (error) {
-    console.log(error);
+    // console.log(error);
     if (error.isJoi === true) error.status = 422;
     next(error);
   }
@@ -879,7 +876,7 @@ exports.deletePost = async (req, res, next) => {
 
 exports.addFaq = async (req, res, next) => {
   try {
-    console.log('body: ', req.body)
+    // console.log('body: ', req.body)
     if (!req.body.faqs) createError.BadRequest('FAQ list can not be empty')
     const user = await User.findById(req.payload.aud);
     if (!user) throw createError.Unauthorized();
@@ -895,7 +892,7 @@ exports.addFaq = async (req, res, next) => {
     for (const key in req.body.faqs) {
       if (req.body.faqs.hasOwnProperty(key)) {
         const element = req.body.faqs[key];
-        console.log('element: ', element);
+        // console.log('element: ', element);
 
         element.author = {
           name: user.firstName + " " + user.lastName,
@@ -906,7 +903,7 @@ exports.addFaq = async (req, res, next) => {
         saveFAQ = await faquestions.save();
       }
     }
-console.log('saveFAQ: ', saveFAQ)
+// console.log('saveFAQ: ', saveFAQ)
     res.send(saveFAQ);
   }
   catch (error) {
@@ -944,7 +941,7 @@ exports.getStoreFaq = async (req, res, next) => {
 
 exports.getSingleFaq = async (req, res, next) => {
   try {
-    console.log(req.query.id)
+    // console.log(req.query.id)
     const faquestion = await Faquestion.findOne({
       _id: req.query.id,
       "author.userId": req.payload.aud
@@ -963,7 +960,7 @@ exports.editFaq = async (req, res, next) => {
   try {
 
     let update = {};
-    console.log('body: ', req.body)
+    // console.log('body: ', req.body)
     if (req.body.question) update.question = req.body.question;
     if (req.body.answer) update.answer = req.body.answer;
 

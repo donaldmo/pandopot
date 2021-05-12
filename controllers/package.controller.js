@@ -53,7 +53,7 @@ exports.buyPackage = async (req, res, next) => {
     if (!admin) throw createError.NotFound();
     if (!admin.adminPaymentGateway) throw createError.InternalServerError()
     let { adminPaymentGateway } = admin;
-    console.log('admin.adminPaymentGateway: ', adminPaymentGateway)
+    // console.log('admin.adminPaymentGateway: ', adminPaymentGateway)
 
     if (req.body.payment && package && adminPaymentGateway) {
       let { id } = req.body.payment;
@@ -78,9 +78,9 @@ exports.buyPackage = async (req, res, next) => {
       };
 
       axios(config).then(async (response) => {
-        console.log(JSON.stringify(response.data));
+        // console.log(JSON.stringify(response.data));
         let payment = response.data;
-        console.log('payment: ', payment)
+        // console.log('payment: ', payment)
 
         let expiryDate;
         if (package.expiryDate) {
@@ -93,7 +93,7 @@ exports.buyPackage = async (req, res, next) => {
           }
         }
 
-        console.log('expiryDate: ', expiryDate)
+        // console.log('expiryDate: ', expiryDate)
 
         if (payment) {
           if (payment.status !==  'successful') {
@@ -134,14 +134,14 @@ exports.buyPackage = async (req, res, next) => {
         }
       })
         .catch(function (error) {
-          console.log(error);
+          // console.log(error);
           next(error);
         });
     }
 
   }
   catch (error) {
-    console.log(error)
+    // console.log(error)
     if (error.isJoi === true) error.status = 422;
     next(error);
   }

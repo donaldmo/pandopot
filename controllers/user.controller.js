@@ -5,6 +5,7 @@ const { authSchema, emailSchema } = require('../helpers/validation_schema');
 const Product = require('../models/product.model');
 const Market = require('../models/market.model');
 const request = require('request');
+const { pagenate } = require('../helpers/pagenate');
 
 const {
   generatePassword,
@@ -19,9 +20,9 @@ const sendEmail = require('../helpers/send_email');
 
 exports.register = async (req, res, next) => {
   try {
-    console.log('user.controller.js::register: body: ', req.body)
+    // console.log('user.controller.js::register: body: ', req.body)
     const hashedPassword = await generatePassword(req.body.password);
-    console.log('hashedPassword: ', hashedPassword)
+    // console.log('hashedPassword: ', hashedPassword)
 
     const result = await authSchema.validateAsync({ email: req.body.email, password: hashedPassword });
     const doesExist = await User.findOne({ email: result.email });
@@ -55,7 +56,7 @@ exports.register = async (req, res, next) => {
     res.send({ accessToken, rereshToken });
   }
   catch (error) {
-    console.log(error)
+    // console.log(error)
     if (error.isJoi === true) error.status = 422;
     next(error);
   }
@@ -109,7 +110,7 @@ exports.refreshToken = async (req, res, next) => {
 exports.confirmEmail = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.payload.aud });
-    console.log(req.payload)
+    // console.log(req.payload)
     if (!user) throw createError.NotFound('User not registered');
     if (user.confirmedEmail === true) throw createError.BadRequest('Email already confirmed');
 
@@ -120,7 +121,7 @@ exports.confirmEmail = async (req, res, next) => {
     res.send({ message: 'Email verified successfuly' });
   }
   catch (error) {
-    console.log(error)
+    // console.log(error)
     next(error);
   }
 }
@@ -149,7 +150,7 @@ exports.getUserAccount = async (req, res, next) => {
 
 exports.updateUserAccount = async (req, res, next) => {
   try {
-    console.log(req.body)
+    // console.log(req.body)
     // throw createError.BadRequest('User details area required');
     if (!req.body) throw createError.BadRequest('User details area required');
     let update = {};
@@ -187,7 +188,7 @@ exports.updateUserAccount = async (req, res, next) => {
     }
 
     if (req.body.featuredImage) update.featuredImage = req.body.featuredImage;
-    console.log('update: ', update)
+    // console.log('update: ', update)
 
     const saveUser = await User.findOneAndUpdate({ _id: req.payload.aud }, update);
     let user = await User.findById(saveUser._id);
@@ -195,14 +196,14 @@ exports.updateUserAccount = async (req, res, next) => {
     res.send({ message: 'user account updated', user: user });
   }
   catch (error) {
-    console.log(error);
+    // console.log(error);
     next(error);
   }
 }
 
 exports.updateUserPaymentGateway = async (req, res, next) => {
   try {
-    console.log(req.body)
+    // console.log(req.body)
     if (!req.body) throw createError.BadRequest('User details area required');
     let saveUser;
 
@@ -221,14 +222,14 @@ exports.updateUserPaymentGateway = async (req, res, next) => {
     res.send(saveUser);
   }
   catch (error) {
-    console.log(error);
+    // console.log(error);
     next(error);
   }
 }
 
 exports.forgotPassword = async (req, res, next) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const result = await emailSchema.validateAsync({ email: req.body.email, });
     const doesExist = await User.findOneAndUpdate({ email: result.email }, {
       resetPassword: true
@@ -247,7 +248,7 @@ exports.forgotPassword = async (req, res, next) => {
   catch (error) {
     if (error.isJoi === true) error.status = 422;
     next(error);
-    console.log(error);
+    // console.log(error);
   }
 }
 
@@ -279,9 +280,9 @@ exports.resetPassword = async (req, res, next) => {
 
 exports.contactUser = async (req, res, next) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const getAuthor = await User.findOne({ _id: req.body.author.userId });
-    console.log('getAuthor: ', getAuthor);
+    // console.log('getAuthor: ', getAuthor);
 
     sendEmail.contactUserEmail({
       data: req.body,
@@ -296,7 +297,7 @@ exports.contactUser = async (req, res, next) => {
   }
 
   catch (error) {
-    console.log(error)
+    // console.log(error)
     if (error.isJoi === true) error.status = 422;
     next(error);
   }
@@ -305,12 +306,12 @@ exports.contactUser = async (req, res, next) => {
 exports.getSingleUser = async (req, res, next) => {
   try {
     const user = await User.findOne({ _id: req.params.id || req.query.id });
-    console.log('user: ', user);
+    // console.log('user: ', user);
     res.send(user);
   }
 
   catch (error) {
-    console.log(error)
+    // console.log(error)
     if (error.isJoi === true) error.status = 422;
     next(error);
   }
@@ -319,12 +320,12 @@ exports.getSingleUser = async (req, res, next) => {
 exports.getUsers = async (req, res, next) => {
   try {
     const users = await User.find({ confirmedEmail: true });
-    console.log('users: ', users);
+    // console.log('users: ', users);
     res.send(users);
   }
 
   catch (error) {
-    console.log(error)
+    // console.log(error)
     if (error.isJoi === true) error.status = 422;
     next(error);
   }
@@ -332,28 +333,43 @@ exports.getUsers = async (req, res, next) => {
 
 exports.getUserItems = async (req, res, next) => {
   try {
+    let { page, size } = pagenate(req.query);
+    const limit = parseInt(size);
+    const skip = (parseInt(page) - 1) * parseInt(size);
+
+    console.log('limit: ', limit, 'skip: ', skip);
     console.log('query: ', req.query);
-    let items = {
-      products: null,
-      market: null
-    };
+
+    let items = { products: null, market: null };
 
     if (req.query.itemType === 'market') {
-      console.log('type: ', req.query.itemType)
-      let getMarket = await Market.find({ "author.userId": req.query.userId });
+      // console.log('type: ', req.query.itemType)
+      let getMarket = await Market.find({
+        "author.userId": req.query.userId
+      }).limit(limit).skip(skip);
+
       items.market = getMarket;
     }
 
     else if (req.query.itemType === 'product') {
-      console.log('type: ', req.query.itemType)
-      let getProducts = await Product.find({ "author.userId": req.query.userId });
+      // console.log('type: ', req.query.itemType)
+      let getProducts = await Product.find({
+        "author.userId": req.query.userId
+      }).limit(limit).skip(skip);
+
       items.products = getProducts;
     }
 
     else {
-      console.log('type: ', 'nada')
-      let products = await Product.find({ "author.userId": req.query.userId });
-      let market = await Market.find({ "author.userId": req.query.userId });
+      // console.log('type: ', 'nada')
+      let products = await Product.find({
+        "author.userId": req.query.userId
+      }).limit(limit).skip(skip);
+
+      let market = await Market.find({
+        "author.userId": req.query.userId
+      }).limit(limit).skip(skip);
+
       items.products = products;
       items.market = market;
     }
@@ -371,7 +387,7 @@ exports.getUserItems = async (req, res, next) => {
 
 exports.subscribe = async (req, res, next) => {
   try {
-    console.log('body: ', req.body);
+    // console.log('body: ', req.body);
     if (!req.body.email) throw createError.BadRequest('Email is required');
     let mcData = {
       members: [{
@@ -382,11 +398,15 @@ exports.subscribe = async (req, res, next) => {
 
     let mcDataPost = JSON.stringify(mcData);
 
+    let MAILCHIMP_API_KEY = '57ba9921c6b448770990fbe7479dc935-us1';
+    let MAILCHIMP_DC = 'us1';
+    let MAILCHIMP_AUDIENCE_ID = 'a1e141d66c';
+
     let options = {
-      url: 'https://us3.api.mailchimp.com/3.0/lists/5b643c9853',
+      url: `https://${MAILCHIMP_DC}.api.mailchimp.com/3.0/lists/${MAILCHIMP_AUDIENCE_ID}`,
       method: 'POST',
       headers: {
-        Authorization: 'auth d5e59442bd752db3842e581fc458364b-us3'
+        Authorization: `auth ${MAILCHIMP_API_KEY}`
       },
       body: mcDataPost
     }
@@ -394,7 +414,7 @@ exports.subscribe = async (req, res, next) => {
     request(options, (err, response, body) => {
       if (err) throw createError.BadRequest();
       console.log('body: ', body)
-      res.send({message: 'success'});
+      res.send({ message: 'success' });
     });
   }
 

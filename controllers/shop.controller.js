@@ -31,9 +31,9 @@ exports.getCategoryProducts = async (req, res, next) => {
     // console.log('limit: ', limit, 'skip: ', skip);
 
     if (!req.query.id) throw createError.BadRequest('No category id provided');
-    console.log('categoryId: ', req.query.id)
+    // console.log('categoryId: ', req.query.id)
     const products = await Product.find({ "category.id": req.query.id }, {}, { limit, skip });
-    console.log('products 1: ', products[0]);
+    // console.log('products 1: ', products[0]);
 
     if (!products) throw createError.NotFound();
     res.send(products);
@@ -245,12 +245,12 @@ exports.getOrderItem = async (req, res, next) => {
       "_id": req.params.id,
       "user.userId": req.payload.aud
     })
-    console.log('orderItem: ', orderItem)
+    // console.log('orderItem: ', orderItem)
 
     res.send(orderItem);
   }
   catch (error) {
-    console.log(error)
+    // console.log(error)
     if (error.isJoi === true) error.status = 422;
     next(error);
   }
@@ -273,7 +273,7 @@ exports.getCustomerSingleOrder = async (req, res, next) => {
 
 exports.search = async (req, res, next) => {
   try {
-    console.log('query: ', req.query);
+    // console.log('query: ', req.query);
     let results = [];
 
     let { size, page } = pagenate(req.query);
@@ -287,7 +287,7 @@ exports.search = async (req, res, next) => {
 
     // if categoryType is Markets searh only market
     if (categoryType === 'market') {
-      console.log('searching market')
+      // console.log('searching market')
       if (categoryId) filter = { ...filter, "category.categoryId": categoryId };
       console.log('filter: ', filter);
       results = await Market.find(filter, {}, { limit, skip });
@@ -295,9 +295,9 @@ exports.search = async (req, res, next) => {
 
     // if category type is 'product || undefined' search only products
     else if (categoryType === 'product') {
-      console.log('searching product')
+      // console.log('searching product')
       if (categoryId) filter = { ...filter, "category.id": categoryId };
-      console.log('filter: ', filter);
+      // console.log('filter: ', filter);
       results = await Product.find(filter, {}, { limit, skip });
     }
 
@@ -318,7 +318,7 @@ exports.search = async (req, res, next) => {
       if (results0.length) results = [...results0];
       if (results1.length) results = [...results, ...results1];
     }
-    console.log('results:', results);
+    // console.log('results:', results);
 
     res.send(results);
   }
@@ -423,7 +423,7 @@ exports.buyProduct = async (req, res, next) => {
 
 exports.getBoostedProducts = async (req, res, next) => {
   try {
-    console.log('params: ', req.params);
+    // console.log('params: ', req.params);
     let products = [];
     let limitrecords = 4;
 
@@ -434,11 +434,11 @@ exports.getBoostedProducts = async (req, res, next) => {
 
       var random = Math.floor(Math.random() * count)
       if (count > limitrecords) {
-        console.log('random: ', random)
+        // console.log('random: ', random)
         let whatLeft = (count - random);
-        console.log('whatLeft: ', whatLeft)
+        // console.log('whatLeft: ', whatLeft)
         if (whatLeft < limitrecords) random = count - limitrecords;
-        console.log('randomFinal: ', random)
+        // console.log('randomFinal: ', random)
       }
       else random = 0;
 
@@ -454,11 +454,11 @@ exports.getBoostedProducts = async (req, res, next) => {
 
       var random = Math.floor(Math.random() * count)
       if (count > limitrecords) {
-        console.log('random: ', random)
+        // console.log('random: ', random)
         let whatLeft = (count - random);
-        console.log('whatLeft: ', whatLeft)
+        // console.log('whatLeft: ', whatLeft)
         if (whatLeft < limitrecords) random = count - limitrecords;
-        console.log('randomFinal: ', random)
+        // console.log('randomFinal: ', random)
       }
       else random = 0;
 
@@ -478,7 +478,7 @@ exports.getBoostedProducts = async (req, res, next) => {
 
 exports.contactUs = async (req, res, next) => {
   try {
-    console.log('body: ', req.body);
+    // console.log('body: ', req.body);
     sendEmail.contactUs({
       data: req.body
     });
@@ -487,7 +487,7 @@ exports.contactUs = async (req, res, next) => {
   }
 
   catch (error) {
-    console.log(error)
+    // console.log(error);
     if (error.isJoi === true) error.status = 422;
     next(error);
   }

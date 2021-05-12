@@ -53,7 +53,7 @@ exports.addMarket = async (req, res, next) => {
 exports.editMarket = async (req, res, next) => {
   try {
     if (!req.body) throw createError.BadRequest('Update fields are required');
-    console.log('body: ', req.body);
+    // console.log('body: ', req.body);
 
     const user = await User.findById(req.payload.aud);
     if (!user) throw createError.NotFound('User not registered');
@@ -69,7 +69,7 @@ exports.editMarket = async (req, res, next) => {
       'author.userId': req.payload.aud
     }, result);
 
-    console.log('update: ', update)
+    // console.log('update: ', update)
 
     res.send(update)
   }
@@ -84,7 +84,7 @@ exports.getMarkets = async (req, res, next) => {
     let { size, page } = pagenate(req.query);
     const limit = parseInt(size);
     const skip = (parseInt(page) - 1) * parseInt(size);
-    console.log('limit: ', limit, 'skip: ', skip);
+    // console.log('limit: ', limit, 'skip: ', skip);
 
     const markets = await Market.find({}, {}, { limit, skip });
 
@@ -98,7 +98,7 @@ exports.getMarkets = async (req, res, next) => {
 
 exports.getMarketsByCategory = async (req, res, next) => {
   try {
-    console.log('categoryId: ', req.query.id || req.body.id);
+    // console.log('categoryId: ', req.query.id || req.body.id);
     const markets = await Market.find({
       "category.categoryId": req.query.id || req.body.id
     });
@@ -121,7 +121,7 @@ exports.getUserMarkets = async (req, res, next) => {
     const markets = await Market.find({
       "author.userId": req.payload.aud
     }, {}, { limit, skip });
-    console.log('markets: ', markets);
+    // console.log('markets: ', markets);
 
     res.send(markets);
   }
@@ -164,7 +164,7 @@ exports.deleteMarket = async (req, res, next) => {
       throw createError.BadRequest('Please provide ID')
     }
     const remove = await Market.deleteOne(req.params.id || req.body.id);
-    console.log(remove);
+    // console.log(remove);
 
     res.send(remove);
   }

@@ -18,7 +18,7 @@ exports.getProducts = async (req, res, next) => {
 
     const limit = parseInt(size);
     const skip = (parseInt(page) - 1) * parseInt(size);
-    console.log('limit: ', limit, 'skip: ', skip);
+    // console.log('limit: ', limit, 'skip: ', skip);
 
     const products = await Product.find().limit(limit).skip(skip);
     if (!products) throw createError.NotFound();
@@ -38,7 +38,7 @@ exports.getUserProducts = async (req, res, next) => {
 
     const limit = parseInt(size);
     const skip = (parseInt(page) - 1) * parseInt(size);
-    console.log('limit: ', limit, 'skip: ', skip);
+    // console.log('limit: ', limit, 'skip: ', skip);
 
     const products = await Product.find({
       "author.userId": req.payload.aud
@@ -70,7 +70,7 @@ exports.getUserProduct = async (req, res, next) => {
 
 exports.addProduct = async (req, res, next) => {
   try {
-    console.log('body: ', req.body, 'query: ', req.query)
+    // console.log('body: ', req.body, 'query: ', req.query)
     const user = await User.findOne({ _id: req.payload.aud });
     if (!user) throw createError.NotFound('User not registered');
 
@@ -104,7 +104,7 @@ exports.addProduct = async (req, res, next) => {
 
     if (!getSubscription) throw createError.BadRequest('No Subscription Found!');
     let { usage, expiryDate } = getSubscription._doc;
-    console.log('usage: ', usage, 'expiryData: ', expiryDate);
+    // console.log('usage: ', usage, 'expiryData: ', expiryDate);
 
     if (usage.used === true) {
       throw createError.BadRequest('This subscription is already used');
@@ -113,11 +113,11 @@ exports.addProduct = async (req, res, next) => {
     const today = Date.now();
 
     if (today > expiryDate) {
-      console.log("Today is greater than Expiry Date.");
+      // console.log("Today is greater than Expiry Date.");
       throw createError.BadRequest('This subscription is expired!');
     }
 
-    console.log("Today is less than Expiry Date.");
+    // console.log("Today is less than Expiry Date.");
 
     result.author = {
       name: user.firstName + user.lastName,
@@ -126,7 +126,7 @@ exports.addProduct = async (req, res, next) => {
 
     const product = new Product(result);
     let saveProduct = await product.save();
-    console.log('saveProduct: ', saveProduct);
+    // console.log('saveProduct: ', saveProduct);
 
     let query = {
       id: req.body._id,
@@ -147,12 +147,12 @@ exports.addProduct = async (req, res, next) => {
 
     const setUsed = await Subscription.findOneAndUpdate(query, update);
 
-    console.log('setUsed: ', setUsed);
+    // console.log('setUsed: ', setUsed);
     res.send(saveProduct);
   }
 
   catch (error) {
-    console.log(error);
+    // console.log(error);
     if (error.isJoi === true) error.status = 422;
     next(error);
   }
@@ -181,10 +181,10 @@ exports.updateProduct = async (req, res, next) => {
     if (!req.body._id) {
       createError.BadRequest('No product id submitted, please provide one and try again.')
     }
-    console.log('body: ', req.body)
+    // console.log('body: ', req.body)
 
     const getProduct = await Product.findById(req.body._id || req.body.id);
-    console.log('getProduct: ', getProduct);
+    // console.log('getProduct: ', getProduct);
     let update = {};
 
     let currentImages = getProduct.images || [];
@@ -195,7 +195,7 @@ exports.updateProduct = async (req, res, next) => {
 
     else if (Object.keys(req.body).length) {
       Object.keys(req.body).map(item => {
-        console.log(item, req.body[item]);
+        // console.log(item, req.body[item]);
         update[item] = req.body[item]
       })
     }
@@ -237,7 +237,7 @@ exports.getStoreProduct = async (req, res, next) => {
   try {
     const product = await Product.findOne({ _id: req.params.id.toString() });
     if (!product) throw createError.NotFound('No product found');
-    console.log('product.controller.js: product: ', product)
+    // console.log('product.controller.js: product: ', product)
     res.send(product);
   }
   catch (error) {
@@ -265,7 +265,7 @@ exports.getPackage = async (req, res, next) => {
 
 exports.boostProduct = async (req, res, next) => {
   try {
-    console.log('body: ', req.body.boostData[0]);
+    // console.log('body: ', req.body.boostData[0]);
     const user = await User.findOne({ _id: req.payload.aud });
     const admin = await User.findOne({ role: 'admin' });
 
@@ -301,7 +301,7 @@ exports.boostProduct = async (req, res, next) => {
       axios(config).then(async (response) => {
         // console.log(JSON.stringify(response.data));
         let payment = response.data;
-        console.log('payment: ', payment);
+        // console.log('payment: ', payment);
 
         let { boostData } = req.body;
         // console.log('boostData: ', boostData)
@@ -325,7 +325,7 @@ exports.boostProduct = async (req, res, next) => {
 
         let data = []
         boostData.map(item => {
-          console.log('boostDataItem: ', item);
+          // console.log('boostDataItem: ', item);
 
           if (ProductFeaturedAndNotExpired && item.name === 'Featured Product') {
             throw createError.BadRequest('This product is already FEATURED & not yet expired');
@@ -359,8 +359,8 @@ exports.boostProduct = async (req, res, next) => {
         let saveBoost = await product.save();
 
         // console.log('saveBoost: ', saveBoost);
-        console.log('newBoostInfo: ', boostInfo);
-        console.log('data: ', data)
+        // console.log('newBoostInfo: ', boostInfo);
+        // console.log('data: ', data)
 
         sendEmail.sendReceipt({
           package: data,
@@ -379,7 +379,7 @@ exports.boostProduct = async (req, res, next) => {
   }  // end try
 
   catch (error) {
-    console.log(error)
+    // console.log(error)
     if (error.isJoi === true) error.status = 422;
     next(error);
   }
@@ -388,7 +388,7 @@ exports.boostProduct = async (req, res, next) => {
 exports.getPlantsTypes = async (req, res, next) => {
   try {
     let filter = {};
-    console.log(req.query)
+    // console.log(req.query)
 
     let subCategory = req.query.subCategory;
     if (subCategory !== undefined && subCategory !== '') {
@@ -396,17 +396,17 @@ exports.getPlantsTypes = async (req, res, next) => {
         "category.subCategory": subCategory
       }
     }
-    console.log('filter: ', filter);
+    // console.log('filter: ', filter);
 
     const plantsTypes = await Product.find(filter);
 
-    console.log('plantsTypes:: herbs: ', plantsTypes);
+    // console.log('plantsTypes:: herbs: ', plantsTypes);
 
     res.send(plantsTypes);
   }
 
   catch (error) {
-    console.log(error)
+    // console.log(error)
     if (error.isJoi === true) error.status = 422;
     next(error);
   }
