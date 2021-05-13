@@ -374,7 +374,7 @@ exports.getUserItems = async (req, res, next) => {
       items.market = market;
     }
 
-    // console.log('items: ', items);
+    console.log('items: ', items);
     res.send(items);
   }
 
