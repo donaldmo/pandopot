@@ -340,7 +340,7 @@ exports.getUserItems = async (req, res, next) => {
     console.log('limit: ', limit, 'skip: ', skip);
     console.log('query: ', req.query);
 
-    let items = { products: null, market: null };
+    let items = { products: [], market: [] };
 
     if (req.query.itemType === 'market') {
       // console.log('type: ', req.query.itemType)
