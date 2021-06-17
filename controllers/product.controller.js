@@ -225,7 +225,7 @@ exports.updateProduct = async (req, res, next) => {
       throw createError.BadRequest('Failed to update');
     }
 
-    res.send(updateProduct);
+    res.send(updateProduct); console.log('updated this controller')
   }
   catch (error) {
     if (error.isJoi === true) error.status = 422;
