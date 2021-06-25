@@ -3,7 +3,8 @@ const User = require('../models/User.model');
 const ProductCategory = require('../models/product_categories.model');
 const { marketSchema, marketUpdateSchema } = require('../helpers/validation_schema');
 const Market = require('../models/market.model');
-const { pagenate } = require('../helpers/pagenate')
+const Organisation = require('../models/organisation.model');
+const { pagenate } = require('../helpers/pagenate');
 
 exports.addMarket = async (req, res, next) => {
   try {
@@ -29,22 +30,43 @@ exports.addMarket = async (req, res, next) => {
       }
     });
 
-    if (req.body.hiking) result.hikingData = {
-      trailType: req.body.trailType,
-      trailLevel: req.body.trailLevel,
-      province: req.body.province,
-      location: req.body.location,
-      price_start: req.body.price_start,
-      price_end: req.body.price_end,
-      details: req.body.details
+    if (req.body.hiking) {
+      let organisation;
+      console.log('body: ', req.body);
+
+      if (req.body.organisationId) {
+        const getOrganisation = await Organisation.findOne({_id: req.body.organisationId});
+        console.log('getOrganisation: ', getOrganisation);
+
+        organisation = {
+          name: getOrganisation.name,
+          organisationId: getOrganisation._id
+        }
+      }
+
+      result.hikingData = {
+        trailType: req.body.trailType,
+        trailLevel: req.body.trailLevel,
+        province: req.body.province,
+        location: req.body.location,
+        price_start: req.body.price_start,
+        price_end: req.body.price_end,
+        details: req.body.details
+      }
+
+      result.organisation = organisation
+
+      console.log('finalResult: ', result);
     }
 
     let market = new Market(result);
     let saveMarket = await market.save();
+    console.log('saveMarket: ', saveMarket);
 
-    res.send(saveMarket)
+    res.send(saveMarket);
   }
   catch (error) {
+    console.log(error);
     if (error.isJoi === true) error.status = 422;
     next(error);
   }
@@ -98,11 +120,48 @@ exports.getMarkets = async (req, res, next) => {
 
 exports.getMarketsByCategory = async (req, res, next) => {
   try {
-    // console.log('categoryId: ', req.query.id || req.body.id);
-    const markets = await Market.find({
-      "category.categoryId": req.query.id || req.body.id
-    });
+    // console.log(req.query);
 
+    let query = {
+      "category.categoryId": req.query.id || req.body.id
+    }
+
+    if(req.query.trailType)  query = {
+      ...query,"hikingData.trailType": req.query.trailType
+    };
+
+    if(req.query.province) query = {
+      ...query,"hikingData.province": req.query.province
+    };
+
+    if(req.query.trailLevel) query = {
+      ...query,"hikingData.trailLevel": req.query.trailLevel
+    };
+    // console.log('finalQuery', query);
+
+    const markets = await Market.find(query);
+
+    // console.log('markets: ', markets[0].hikingData);
+    res.send(markets);
+  }
+  catch (error) {
+    if (error.isJoi === true) error.status = 422;
+    next(error);
+  }
+}
+
+exports.getMarketsByCategoryName = async (req, res, next) => {
+  try {
+    console.log('params: ',req.params);
+
+    let query = {
+      "category.name": req.params.categoryName
+    }
+    console.log('query:: ', query);
+
+    const markets = await Market.find(query);
+
+    console.log('markets: ', markets[0]);
     res.send(markets);
   }
   catch (error) {
@@ -159,7 +218,7 @@ exports.updateMarket = async (req, res, next) => {
 }
 
 exports.deleteMarket = async (req, res, next) => {
-  try {
+  try {  
     if (!req.params.id || req.body.id) {
       throw createError.BadRequest('Please provide ID')
     }
@@ -169,6 +228,34 @@ exports.deleteMarket = async (req, res, next) => {
     res.send(remove);
   }
   catch (error) {
+    if (error.isJoi === true) error.status = 422;
+    next(error);
+  }
+}
+
+exports.getHikingMetadata = async (req, res, next) => {
+  try {
+    console.log('hikingMetadata: ', req.params);
+
+    let metadata = {
+      hikingMarket: [],
+      hikingOrganisations: []
+    }
+    
+    // get all hiking market
+    let hikingMarket = await Market.find().limit(3);
+    if (hikingMarket) metadata.hikingMarket = hikingMarket;
+
+    // get Hiking Organisations
+    // change the query to inlcude hiking organisations only
+    let hikingOrganisations = await Organisation.find().limit(3);
+    if (hikingOrganisations) metadata.hikingOrganisations = hikingOrganisations;
+    // console.log('metadata', metadata);
+
+    res.send(metadata);
+  }
+  catch (error) {
+    console.log(error);
     if (error.isJoi === true) error.status = 422;
     next(error);
   }

@@ -72,7 +72,8 @@ const marketSchema = Joi.object({
   category: Joi.object().required(),
   location: Joi.string().required(),
   phone: Joi.string().required(),
-  website: Joi.string()
+  website: Joi.string(),
+  organisation: Joi.string()
 })
 
 const marketUpdateSchema = Joi.object({
@@ -90,9 +91,18 @@ const marketUpdateSchema = Joi.object({
   publish: Joi.boolean()
 })
 
+const organisationSchema = Joi.object({
+  name: Joi.string().required(),
+  author: Joi.object().required(),
+  province: Joi.string().required(),
+  city: Joi.string().required(),
+  address: Joi.string().required(),
+  featuredImage: Joi.object(),
+});
+
 module.exports = {
   authSchema, emailSchema, packageSchema, productSchema, 
   productUpdateSchema, adminPaymentGatewaySchema, marketSchema,
-  marketUpdateSchema
+  marketUpdateSchema, organisationSchema
 }
 

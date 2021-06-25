@@ -40,6 +40,20 @@ const UserSchema = new Schema({
     secret_key: String,
     public_key: String
   },
+
+  organisation: [{
+    organisationId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Organisation',
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    }
+  }]
+  ,
+
   adminPaymentGateway: {
     name: String,
     secret_key: String,
@@ -199,7 +213,7 @@ UserSchema.methods.addOrder = async function (products) {
 
     if (saveOrder) {
       this.cart = { items: [] }
-      await this.save();    
+      await this.save();
       return saveOrder;
     }
   }

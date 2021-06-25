@@ -11,8 +11,11 @@ router.get('/get-user-markets', verifyAccessToken, marketController.getUserMarke
 router.get('/get-markets', marketController.getMarkets);
 router.get('/get-market/:id', marketController.getSingleMarket);
 router.get('/category', marketController.getMarketsByCategory);
+router.get('/category/:categoryName', marketController.getMarketsByCategoryName);
 
 router.put('/update-market', verifyAccessToken,marketController.updateMarket);
 router.delete('/delete-market/:id', verifyAccessToken, marketController.deleteMarket);
+
+router.get('/get-hiking-metadata/:categoryName', marketController.getHikingMetadata);
 
 module.exports = router; 

@@ -22,7 +22,6 @@ exports.getProducts = async (req, res, next) => {
 
     const products = await Product.find().limit(limit).skip(skip);
     if (!products) throw createError.NotFound();
-    // console.log(products);
 
     res.send(products);
   }

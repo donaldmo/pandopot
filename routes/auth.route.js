@@ -21,11 +21,14 @@ router.get('/my-account', verifyAccessToken, userController.getUserAccount);
 
 router.post('/my-account/update', verifyAccessToken, userController.updateUserAccount);
 router.post('/my-account/update-payment-gateway', verifyAccessToken, userController.updateUserPaymentGateway);
+router.put('/my-account/update-organisation', verifyAccessToken, userController.updateUserOrganisation);
+router.post('/my-account/add-organisation', verifyAccessToken, userController.addUserOrganisation);
+router.get('/my-account/get-user-organisation', verifyAccessToken, userController.getUserOrganisation);
 
 router.post('/user/contact-user', userController.contactUser);
 
 router.get('/users', userController.getUsers);
-router.get('/single-user/:id', userController.getSingleUser)
+router.get('/single-user/:id', userController.getSingleUser);
 router.get('/user-items', userController.getUserItems);
 
 router.post('/subscribe', userController.subscribe);

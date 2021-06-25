@@ -1,9 +1,10 @@
 const createError = require('http-errors');
 const ms = require('ms');
 const User = require('../models/User.model');
-const { authSchema, emailSchema } = require('../helpers/validation_schema');
+const { authSchema, emailSchema, organisationSchema } = require('../helpers/validation_schema');
 const Product = require('../models/product.model');
 const Market = require('../models/market.model');
+const Organisation = require('../models/organisation.model');
 const request = require('request');
 const { pagenate } = require('../helpers/pagenate');
 
@@ -227,6 +228,76 @@ exports.updateUserPaymentGateway = async (req, res, next) => {
   }
 }
 
+exports.updateUserOrganisation = async (req, res, next) => {
+  try {
+    console.log('query', req.query)
+    if (!req.body) throw createError.BadRequest('User details area required');
+    let update = {}
+    console.log('body: ', req.body);
+    // const updateOrganisation = Organisation.findOneAndUpdate({_id: req.query.id}, update);
+
+    res.send({});
+  }
+  catch (error) {
+    // console.log(error);
+    next(error);
+  }
+}
+
+exports.addUserOrganisation = async (req, res, next) => {
+  try {
+    if (!req.body) throw createError.BadRequest('User details area required');
+
+    const user = await User.findOne({ _id: req.payload.aud });
+    if (!user) throw createError.BadRequest('Could Not Find User');
+
+    const result = await organisationSchema.validateAsync({
+      name: req.body.name,
+      province: req.body.name,
+      city: req.body.city,
+      address: req.body.address,
+      author: {
+        name: `${user.firstName} ${user.lastName}`,
+        userId: user._id
+      },
+    });
+
+    const organisation = new Organisation(result);
+    const saveOrganisation = await organisation.save(result);
+
+    const update = {
+      organisation: [
+        ...user.organisation,
+        {
+          organisationId: saveOrganisation._id,
+          name: saveOrganisation.name
+        }
+      ]
+    }
+
+    const saveUserOrganisation = await User.findOneAndUpdate({ _id: req.payload.aud }, update);
+    res.send(saveUserOrganisation);
+  }
+  catch (error) {
+    console.log(error);
+    next(error);
+  }
+}
+
+exports.getUserOrganisation = async (req, res, next) => {
+  try {
+    const organisation = await Organisation.findOne({
+      _id: req.query.id || req.params.id
+    });
+
+    res.send(organisation);
+  }
+  catch (error) {
+    console.log(error);
+    next(error);
+  }
+}
+
 exports.forgotPassword = async (req, res, next) => {
   try {
     // console.log(req.body);
@@ -420,6 +491,22 @@ exports.subscribe = async (req, res, next) => {
 
   catch (error) {
     console.log(error)
+    if (error.isJoi === true) error.status = 422;
+    next(error);
+  }
+}
+
+exports.saveOrganisation = async (req, res, next) => {
+  try {
+    console.log('saveOrganisation:: User Id: ', req.payload.aud);
+
+    // const organisation = await Organisation.find();
+    // console.log('users: ', users);
+    res.send({ message: 'save organisation' });
+  }
+
+  catch (error) {
+    // console.log(error)
     if (error.isJoi === true) error.status = 422;
     next(error);
   }

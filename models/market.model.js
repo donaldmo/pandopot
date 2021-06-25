@@ -51,6 +51,18 @@ const MarketSchema = new Schema({
       required: true,
       ref: 'ProductCategory'
     }
+  },
+
+  organisation: {
+    name: {
+      type: String,
+      required: true
+    },
+    organisationId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'Organisation'
+    }
   }
 },
 { timestamps: true });
