@@ -69,7 +69,7 @@ exports.getUserProduct = async (req, res, next) => {
 
 exports.addProduct = async (req, res, next) => {
   try {
-    // console.log('body: ', req.body, 'query: ', req.query)
+    console.log('body: ', req.body, 'query: ', req.query)
     const user = await User.findOne({ _id: req.payload.aud });
     if (!user) throw createError.NotFound('User not registered');
 
@@ -84,7 +84,8 @@ exports.addProduct = async (req, res, next) => {
       units: req.body.units,
       province: req.body.province,
       city: req.body.city,
-      subscriptionId: req.body.subscriptionId
+      subscriptionId: req.body.subscriptionId,
+      reducedPrice: req.body.reducedPrice
     });
 
     const getCategory = await ProductCategory.findOne({ name: result.category });
@@ -125,12 +126,7 @@ exports.addProduct = async (req, res, next) => {
 
     const product = new Product(result);
     let saveProduct = await product.save();
-    // console.log('saveProduct: ', saveProduct);
-
-    let query = {
-      id: req.body._id,
-      "subscriber.userId": req.payload.aud
-    };
+    console.log('saveProduct: ', saveProduct);
 
     let update = {
       usage: {
@@ -144,14 +140,18 @@ exports.addProduct = async (req, res, next) => {
       }
     }
 
-    const setUsed = await Subscription.findOneAndUpdate(query, update);
+    const setUsed = await Subscription.findOneAndUpdate({ 
+      _id: req.body.subscriptionId, 
+      "subscriber.userId": req.payload.aud
+    }, update);
 
-    // console.log('setUsed: ', setUsed);
-    res.send(saveProduct);
+    console.log('setUsed: ', setUsed);
+
+    res.send({});
   }
 
   catch (error) {
-    // console.log(error);
+    console.log(error);
     if (error.isJoi === true) error.status = 422;
     next(error);
   }
@@ -178,9 +178,9 @@ exports.deleteProduct = async (req, res, next) => {
 exports.updateProduct = async (req, res, next) => {
   try {
     if (!req.body._id) {
-      createError.BadRequest('No product id submitted, please provide one and try again.')
+      createError.BadRequest('No product id submitted, please provide one and try again.');
     }
-    // console.log('body: ', req.body)
+    console.log('body: ', req.body)
 
     const getProduct = await Product.findById(req.body._id || req.body.id);
     // console.log('getProduct: ', getProduct);
@@ -200,7 +200,7 @@ exports.updateProduct = async (req, res, next) => {
     }
 
     else {
-      throw createError.BadRequest('No update info received')
+      throw createError.BadRequest('No update info received');
     }
 
     let result = await productUpdateSchema.validateAsync(update);
@@ -224,7 +224,7 @@ exports.updateProduct = async (req, res, next) => {
       throw createError.BadRequest('Failed to update');
     }
 
-    res.send(updateProduct); console.log('updated this controller')
+    res.send(updateProduct); console.log('updated this controller');
   }
   catch (error) {
     if (error.isJoi === true) error.status = 422;

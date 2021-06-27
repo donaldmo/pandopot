@@ -22,6 +22,7 @@ const ProductSchema = new Schema({
 
   payment: { type: String, required: true },
   price: { type: Number, required: true },
+  reducedPrice: { type: Number, default: 0 },
   description: { type: String, required: true },
   delivery: { type: String, required: true },
   deliveryPrice: { type: String, required: true },

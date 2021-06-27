@@ -35,7 +35,7 @@ exports.addMarket = async (req, res, next) => {
       console.log('body: ', req.body);
 
       if (req.body.organisationId) {
-        const getOrganisation = await Organisation.findOne({_id: req.body.organisationId});
+        const getOrganisation = await Organisation.findOne({ _id: req.body.organisationId });
         console.log('getOrganisation: ', getOrganisation);
 
         organisation = {
@@ -75,25 +75,35 @@ exports.addMarket = async (req, res, next) => {
 exports.editMarket = async (req, res, next) => {
   try {
     if (!req.body) throw createError.BadRequest('Update fields are required');
-    // console.log('body: ', req.body);
+    console.log('body: ', req.body);
 
     const user = await User.findById(req.payload.aud);
     if (!user) throw createError.NotFound('User not registered');
+    let update = req.body;
 
-    const result = await marketUpdateSchema.validateAsync(req.body);
+    if (req.body.organisation) {
+      let organisation = await Organisation.findOne({ _id: req.body.organisation });
+      console.log('organisation: ', organisation);
+      if (organisation) update.organisation = {
+        name: organisation.name,
+        organisationId: organisation.id
+      }
+      console.log('update: ', update);
+    }
+
+    let result = await marketUpdateSchema.validateAsync(update);
 
     if (Object.keys(result).length <= 1) {
       throw createError.BadRequest('Update Fields are Required')
     }
 
-    let update = await Market.updateOne({
+    let updateMarket = await Market.updateOne({
       _id: req.body.marketId,
       'author.userId': req.payload.aud
     }, result);
-
     // console.log('update: ', update)
 
-    res.send(update)
+    res.send(updateMarket);
   }
   catch (error) {
     if (error.isJoi === true) error.status = 422;
@@ -110,7 +120,7 @@ exports.getMarkets = async (req, res, next) => {
 
     const markets = await Market.find({}, {}, { limit, skip });
 
-    res.send(markets)
+    res.send(markets);
   }
   catch (error) {
     if (error.isJoi === true) error.status = 422;
@@ -126,16 +136,16 @@ exports.getMarketsByCategory = async (req, res, next) => {
       "category.categoryId": req.query.id || req.body.id
     }
 
-    if(req.query.trailType)  query = {
-      ...query,"hikingData.trailType": req.query.trailType
+    if (req.query.trailType) query = {
+      ...query, "hikingData.trailType": req.query.trailType
     };
 
-    if(req.query.province) query = {
-      ...query,"hikingData.province": req.query.province
+    if (req.query.province) query = {
+      ...query, "hikingData.province": req.query.province
     };
 
-    if(req.query.trailLevel) query = {
-      ...query,"hikingData.trailLevel": req.query.trailLevel
+    if (req.query.trailLevel) query = {
+      ...query, "hikingData.trailLevel": req.query.trailLevel
     };
     // console.log('finalQuery', query);
 
@@ -152,13 +162,12 @@ exports.getMarketsByCategory = async (req, res, next) => {
 
 exports.getMarketsByCategoryName = async (req, res, next) => {
   try {
-    console.log('params: ',req.params);
+    console.log('params: ', req.params);
 
     let query = {
       "category.name": req.params.categoryName
     }
     console.log('query:: ', query);
-
     const markets = await Market.find(query);
 
     console.log('markets: ', markets[0]);
@@ -184,7 +193,7 @@ exports.getUserMarkets = async (req, res, next) => {
 
     res.send(markets);
   }
-  
+
   catch (error) {
     if (error.isJoi === true) error.status = 422;
     next(error);
@@ -218,7 +227,7 @@ exports.updateMarket = async (req, res, next) => {
 }
 
 exports.deleteMarket = async (req, res, next) => {
-  try {  
+  try {
     if (!req.params.id || req.body.id) {
       throw createError.BadRequest('Please provide ID')
     }
@@ -241,7 +250,7 @@ exports.getHikingMetadata = async (req, res, next) => {
       hikingMarket: [],
       hikingOrganisations: []
     }
-    
+
     // get all hiking market
     let hikingMarket = await Market.find().limit(3);
     if (hikingMarket) metadata.hikingMarket = hikingMarket;

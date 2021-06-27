@@ -34,7 +34,8 @@ const productSchema = Joi.object({
   images: Joi.array(),
   featuredImage: Joi.object(),
   subscriptionId: Joi.string().required(),
-  boostInfo: Joi.object()
+  boostInfo: Joi.object(),
+  reducedPrice: Joi.number()
 });
 
 const productUpdateSchema = Joi.object({
@@ -56,7 +57,8 @@ const productUpdateSchema = Joi.object({
   featuredImage: Joi.object(),
   subscriptionId: Joi.string(),
   boostInfo: Joi.object(),
-  published: Joi.boolean()
+  published: Joi.boolean(),
+  reducedPrice: Joi.number()
 });
 
 const adminPaymentGatewaySchema = Joi.object({
@@ -88,7 +90,8 @@ const marketUpdateSchema = Joi.object({
   hikingData: Joi.object(),
   featuredImage: Joi.object(),
   images: Joi.array(),
-  publish: Joi.boolean()
+  publish: Joi.boolean(),
+  organisation: Joi.object(),
 })
 
 const organisationSchema = Joi.object({
