@@ -16,7 +16,7 @@ const mongoose = require('mongoose');
 // });
 
 // const uri = `mongodb+srv://${process.env.DB_USERNAME_PROD}:${process.env.DB_PASS_PROD}@cluster0.yjoup.gcp.mongodb.net/${process.env.DB_NAME_PROD}`;
-const uri = `mongodb+srv://pandopot:MF2MolHMUfmcnflJ@cluster0.yjoup.gcp.mongodb.net/pandopot`;
+const uri = `mongodb+srv://pandopot:FVA7TI6h6kWChppk@cluster0.yjoup.gcp.mongodb.net/pandopot`;
 
 const connectionParams = {
   useNewUrlParser: true,

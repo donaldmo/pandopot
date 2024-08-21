@@ -77,12 +77,13 @@ exports.login = async (req, res, next) => {
 
     res.cookie(process.env.SESSION_NAME, accessToken, {
       httpOnly: true,
-      maxAge: ms(process.env.SESSION_LIFETIME) * 1000
+      maxAge: 31536000000 // ms(process.env.SESSION_LIFETIME) * 1000
     });
 
     res.send({ accessToken, rereshToken });
   }
   catch (error) {
+    console.log("Error: ", error)
     if (error.isJoi === true) {
       return next(createError.BadRequest('Invalid username/password'));
     }

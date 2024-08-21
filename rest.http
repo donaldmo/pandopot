@@ -1,7 +1,13 @@
-GET http://localhost:4000
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTQwNzUxMTAsImV4cCI6MTYxNDE2MTUxMCwiYXVkIjoiNjAyZmQ1OWQ1NDk5ZTUwNjUyZjcwZWUzIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.WAxtkbWf7oBd5BX5RYrCMVIzKHU8tldie9rr0__DDDo
+@bearerToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MjQxODI3MTEsImV4cCI6MTcyNDc4NzUxMSwiYXVkIjoiNjZjNGUyZTRhN2U5M2QwYmNlMjcxNjMxIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.Kq5Obd-t2VYk1HItdFon86J79QVrdkv3aYjPNviRMlc
 
-###Login Route
+### Status Route
+GET http://localhost:4000/status
+
+### Home
+GET http://localhost:4000
+Authorization: Bearer {{bearerToken}}
+
+### Login Route
 POST http://localhost:4000/auth/login
 Content-Type: application/json
 
@@ -10,7 +16,7 @@ Content-Type: application/json
   "password": "password123"
 }
 
-###Register Route For Admins
+### Register Route For Admins
 POST http://localhost:4000/auth/register
 Content-Type: application/json
 
@@ -22,7 +28,7 @@ Content-Type: application/json
   "role": "admin"
 }
 
-###Register Route
+### Register Route
 POST http://localhost:4000/auth/register
 Content-Type: application/json
 
@@ -31,7 +37,7 @@ Content-Type: application/json
   "password": "password123"
 }
 
-###Refresh token Route
+### Refresh Token Route
 POST http://localhost:4000/auth/refresh-token
 Content-Type: application/json
 
@@ -39,10 +45,10 @@ Content-Type: application/json
   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTMzMDI2MzgsImV4cCI6MTY0NDg2MDIzOCwiYXVkIjoiNjAyN2NkMDc0YWQ4OTczZTM4OGU0MGYxIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.bxGmWWs-b5evJ5P_s3U8IitbVKrL_3snf8bPVO60IGM"
 }
 
-###Logout Route
+### Logout Route
 DELETE http://localhost:4000/auth/logout
 
-###Test email Route
+### Test Email Route
 POST http://localhost:4000/auth/sendemail
 Content-Type: application/json
 
@@ -51,7 +57,7 @@ Content-Type: application/json
   "username": "@domotswiri"
 }
 
-###Verify email Route
+### Verify Email Route
 POST http://localhost:4000/auth/verify-email
 Content-Type: application/json
 
@@ -59,12 +65,11 @@ Content-Type: application/json
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTM0OTA3NjAsImV4cCI6MTYxMzU3NzE2MCwiYXVkIjoidGVzdDMwQGdtYWlsLmNvbSIsImlzcyI6InBpY2t1cnBhZ2UuY29tIn0.MJudFm-kduObitPeuN_qK166IJjkVO4N7Kutj83xftE"
 }
 
-###User Account Details Route
+### User Account Details Route
 GET http://localhost:4000/auth/my-account
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTQ1ODU4NTEsImV4cCI6MTYxNDY3MjI1MSwiYXVkIjoidGVzdDMzQGdtYWlsLmNvbSIsImlzcyI6InBpY2t1cnBhZ2UuY29tIn0.E-TiEBcJ87UdLNdRlPLcy3PfR7qfnfsthg2ImEzaY5o"
+Authorization: Bearer {{bearerToken}}
 
-
-### Forgot password Route
+### Forgot Password Route
 POST http://localhost:4000/auth/forgot-password
 Content-Type: application/json
 
@@ -72,7 +77,7 @@ Content-Type: application/json
   "email": "domotswiri@gmail.com"
 }
 
-### Reset password Route
+### Reset Password Route
 POST http://localhost:4000/auth/reset-password
 Content-Type: application/json
 
@@ -81,20 +86,19 @@ Content-Type: application/json
   "password": "password123"
 }
 
-### GET users
+### GET Users Route
 GET http://localhost:4000/auth/users
 Content-Type: application/json
-
 
 ### Get Subscription Route
 GET http://localhost:4000/subscription/get-subscription
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTYwNjc1NzAsImV4cCI6MTYxODY1OTU3MCwiYXVkIjoiNjAyYmVlMDI3YWQxY2IyODBjNTMwZjJmIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.MFvsd1blANVRvZXDeirQ2oN-Ak_jj2LV7LYNazkGXn0
+Authorization: Bearer {{bearerToken}}
 
 ### POST Subscription Route
 POST http://localhost:4000/subscription/add-subscription
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTYwNjc1NzAsImV4cCI6MTYxODY1OTU3MCwiYXVkIjoiNjAyYmVlMDI3YWQxY2IyODBjNTMwZjJmIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.MFvsd1blANVRvZXDeirQ2oN-Ak_jj2LV7LYNazkGXn0
+Authorization: Bearer {{bearerToken}}
 
 {
   "email": "test33@gmail.com"
@@ -103,18 +107,18 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTYwNjc1N
 ### GET Subscriptions Route
 GET http://localhost:4000/subscription/get-subscriptions
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTYwNjc1NzAsImV4cCI6MTYxODY1OTU3MCwiYXVkIjoiNjAyYmVlMDI3YWQxY2IyODBjNTMwZjJmIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.MFvsd1blANVRvZXDeirQ2oN-Ak_jj2LV7LYNazkGXn0
+Authorization: Bearer {{bearerToken}}
 
-### GET Subscription Route
+### GET Subscription by ID Route
 GET http://localhost:4000/subscription/get-subscription/606c3fe220f4340244fa80c4
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTYwNjc1NzAsImV4cCI6MTYxODY1OTU3MCwiYXVkIjoiNjAyYmVlMDI3YWQxY2IyODBjNTMwZjJmIiwiaXNzIjoicGlja3VycGFnZS5jb20ifQ.MFvsd1blANVRvZXDeirQ2oN-Ak_jj2LV7LYNazkGXn0
+Authorization: Bearer {{bearerToken}}
 
 {
   "id": "606c3fe220f4340244fa80c4"
 }
 
-### POST Contact user
+### POST Contact User
 POST http://localhost:4000/auth/user/contact-user
 Content-Type: application/json
 

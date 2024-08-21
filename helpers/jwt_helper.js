@@ -21,13 +21,14 @@ module.exports = {
       const secret = process.env.ACCESS_TOKEN_SECRET;
 
       const options = {
-        expiresIn: process.env.ACCESS_TOKEN_EXP,
+        expiresIn: "7d", // // process.env.ACCESS_TOKEN_EXP
         issuer: 'pickurpage.com',
         audience: userId
       };
 
       JWT.sign(payload, secret, options, (err, token) => {
         if (err) {
+          console.log("jwt_helpers.js: ", error)
           reject(createError.InternalServerError());
         }
 
@@ -62,12 +63,13 @@ module.exports = {
       const secret = process.env.REFRESH_TOKEN_SECRET;
 
       const options = {
-        expiresIn: process.env.REFRESH_TOKEN_EXP,
+        expiresIn: "1d", // process.env.REFRESH_TOKEN_EXP,
         issuer: 'pickurpage.com',
         audience: userId
       };
 
       JWT.sign(payload, secret, options, (err, token) => {
+        console.log("Error: ", err)
         if (err) {
           reject(createError.InternalServerError());
         }

@@ -43,7 +43,7 @@ app.use((req, res, next) => {
 // let uri = `${process.env.MONGODB_URI}/${process.env.DB_NAME}`
 
 // Product
-const uri = `mongodb+srv://pandopot:MF2MolHMUfmcnflJ@cluster0.yjoup.gcp.mongodb.net/pandopot`;
+const uri = `mongodb+srv://pandopot:FVA7TI6h6kWChppk@cluster0.yjoup.gcp.mongodb.net/pandopot`;
 
 const mongoDBStore = new MongoDBStore({
   uri: uri,
