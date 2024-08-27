@@ -1,0 +1,99 @@
+openapi: 3.0.0
+info:
+  title: Pandopot API
+  description: |
+    **Pandopot** is a web application designed as a marketplace for plant enthusiasts and nature lovers. Whether you're looking to purchase plants or seeds, or interested in selling your own, Pandopot offers a platform to meet your needs. You can register to sell your products at your own price, manage orders, and upload your own items for sale. For those seeking to buy, Pandopot provides a variety of plants and gardening supplies, making it easier to find and acquire the perfect addition to your collection.
+  version: 1.0.0
+servers:
+  - url: http://localhost:4000
+    description: Local server
+paths:
+  /auth/register:
+    post:
+      summary: Register a new user
+      description: |
+        Registers a new user by validating the email and password, checking if the user already exists, and creating a new user in the database. Generates and returns authentication tokens. Sends a confirmation email to the user with a confirmation token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: The email of the user.
+                  example: user@example.com
+                password:
+                  type: string
+                  description: The password for the user.
+                  example: password123
+                firstName:
+                  type: string
+                  description: The first name of the user.
+                  example: John
+                lastName:
+                  type: string
+                  description: The last name of the user.
+                  example: Doe
+                role:
+                  type: string
+                  description: The role of the user. If omitted, the user will be registered as a general user.
+                  example: admin
+      responses:
+        '201':
+          description: User successfully registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Confirmation message indicating successful registration.
+                    example: 'User registered successfully'
+                  data:
+                    type: object
+                    properties:
+                      accessToken:
+                        type: string
+                        description: The access token for the user.
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                      refreshToken:
+                        type: string
+                        description: The refresh token for the user.
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        '400':
+          description: Bad request - Invalid input data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message explaining what went wrong.
+                    example: "Invalid email format"
+        '409':
+          description: Conflict - User already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message explaining the conflict.
+                    example: "User with this email already exists"
+        '422':
+          description: Validation error - Invalid input data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Validation error message with details.
+                    example: "Validation error: 'email' is required, 'password' is too short"

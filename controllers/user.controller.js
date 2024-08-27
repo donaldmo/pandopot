@@ -21,7 +21,7 @@ const sendEmail = require('../helpers/send_email');
 
 /**
  * Registers a new user by validating the input data, hashing the password, saving the user,
- * generating access and refresh tokens, and sending a registration email.
+ * Sets a secure HTTP-only cookie with the access token and sends the access and refresh tokens in the response.
  *
  * @async
  * @function register
@@ -81,23 +81,30 @@ exports.register = async (req, res, next) => {
     const rereshToken = await signRefreshToken(savedUser.id);
     const confirmToken = await generateConfirmToken(result.email);
 
-    /**
-     * Send a registration confirmation email to the user with the confirmation token.
-     */
+    // Send a registration confirmation email to the user with the confirmation token.
     sendEmail.registerEmail({
       username: req.body.email,
       confirmToken: confirmToken,
       email: result.email
     });
 
+    // Set the access token in a secure HTTP-only cookie and send the tokens in the response.
     res.cookie(process.env.SESSION_NAME, accessToken, {
       httpOnly: true,
       maxAge: ms(process.env.SESSION_LIFETIME) * 1000
     });
 
-    res.send({ accessToken, rereshToken });
+    // Send a RESTful JSON response with the access and refresh tokens.
+    res.status(201).json({
+      message: 'User registered successfully',
+      data: {
+        accessToken,
+        refreshToken
+      }
+    });
   }
   catch (error) {
+    // Handle validation and other errors
     if (error.isJoi === true) {
       error.status = 422;
       var msg = error.details.map(detail => detail.message).join(', ');

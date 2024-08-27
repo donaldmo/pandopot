@@ -5,8 +5,11 @@ const session = require("express-session");
 const MongoDBStore = require('connect-mongodb-session')(session);
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-
 const multer = require('multer');
+
+const path = require('path');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs')
 
 require('dotenv').config();
 require('./helpers/init_mongodb');
@@ -22,6 +25,15 @@ const SubscriptionRoute = require('./routes/subscription.route');
 const PackageRoute = require('./routes/package.route');
 
 const app = express();
+
+/**
+ * Load the OpenAPI specification
+ * Serve Swagger API documentation
+ */
+const swaggerDocument = YAML.load(path.join(__dirname, 'swagger.yaml'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
