@@ -19,30 +19,71 @@ const {
 
 const sendEmail = require('../helpers/send_email');
 
+/**
+ * Registers a new user by validating the input data, hashing the password, saving the user,
+ * generating access and refresh tokens, and sending a registration email.
+ *
+ * @async
+ * @function register
+ * @param {Object} req - Express request object containing ther user's email, password firstName, lastName, and role.
+ * @param {Object} res - Express response object use to send the access and refressh tokens.
+ * @param {Function} next - Express middleware next function for error handling.
+ * @param {Promise<void>} - Returns nothing, sends response or passes errors to the next middleware.
+ * 
+ * @throws {ConflictError} If the email is already registered.
+ * @throws {ValidationError} If the input is invalid (handle by Joi).
+ */
 exports.register = async (req, res, next) => {
   try {
-    // console.log('user.controller.js::register: body: ', req.body)
+    // Hash the users's password.
     const hashedPassword = await generatePassword(req.body.password);
-    // console.log('hashedPassword: ', hashedPassword)
 
+    /**
+     * Validate the user's email and hashed password using the defined schema.
+     * Check if the user already exists in the database.
+     * If a user is found, throw a Conflict error indicating the email is already registered.
+     */
     const result = await authSchema.validateAsync({ email: req.body.email, password: hashedPassword });
     const doesExist = await User.findOne({ email: result.email });
     if (doesExist) throw createError.Conflict(`${result.email} is already registered`);
 
+    /**
+     * If both firstName and lastName are provided in the request body,
+     * trim any extra whitespace and add them to the result object.
+     */
     if (req.body.firstName && req.body.lastName) {
       result.firstName = req.body.firstName.trim();
       result.lastName = req.body.lastName.trim();
     }
 
-    if (req.body.role && req.body.role !== '') result.role = req.body.role;
+    /**
+     * For both user and admin registration, assign the role from the request 
+     * if provided and not empty. If omitted, the user is registered as a general user.
+     */
+    if (req.body.role && req.body.role !== '') {
+      result.role = req.body.role;
+    }
 
+    // Create a new User instance with the result data and save it to the database.
     const user = new User(result);
     const savedUser = await user.save();
 
+    /**
+     * Generate tokens for the registered user:
+     * - An access token for authentication.
+     * - A refresh token for token renewal.
+     * - A confirmation token for email verification.
+     *
+     * @async
+     * @returns {Promise<void>}
+     */
     const accessToken = await signAccessToken(savedUser.id);
     const rereshToken = await signRefreshToken(savedUser.id);
     const confirmToken = await generateConfirmToken(result.email);
 
+    /**
+     * Send a registration confirmation email to the user with the confirmation token.
+     */
     sendEmail.registerEmail({
       username: req.body.email,
       confirmToken: confirmToken,
@@ -57,9 +98,11 @@ exports.register = async (req, res, next) => {
     res.send({ accessToken, rereshToken });
   }
   catch (error) {
-    // console.log(error)
-    if (error.isJoi === true) error.status = 422;
-    next(error);
+    if (error.isJoi === true) {
+      error.status = 422;
+      var msg = error.details.map(detail => detail.message).join(', ');
+      error.message = 'Validation error: ' + msg
+    }
   }
 }
 
@@ -67,6 +110,7 @@ exports.login = async (req, res, next) => {
   try {
     const result = await authSchema.validateAsync(req.body);
     const user = await User.findOne({ email: result.email });
+
     if (!user) throw createError.NotFound('User not registered');
 
     const isMatch = await user.isValidPassword(result.password);
