@@ -1,7 +1,3 @@
-Here’s the complete README file for your project, including updated instructions on generating and updating the `.env` file:
-
----
-
 # Pandopot API
 
 Pandopot is a web application marketplace for plants and nature enthusiasts. It allows users to register, sell plants or seeds, manage orders, and upload products. Buyers can browse and purchase plants or seeds according to their preferences.
@@ -96,7 +92,3 @@ Contributions are welcome! If you have suggestions or improvements, please submi
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-Feel free to adjust any details according to your project's specifics.
